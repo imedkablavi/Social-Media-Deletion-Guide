@@ -29,8 +29,9 @@
 ├─ js/app.js # Initialization + lifecycle
 └─ index.html # Main document
 
-yaml
-Copy code
+## 🚀 Live Demo
+
+Visit the live demo: [Social Media Deletion Guide](https://imedkablavi.github.io/Social-Media-Deletion-Guide/)
 
 ---
 
@@ -63,3 +64,4 @@ Copy code
 If you like this project, you can support me here:  
 
 [![BuyMeACoffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/imed_kablavi)
+

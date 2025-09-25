@@ -1,0 +1,176 @@
+<!DOCTYPE html> 
+<html lang="ar" data-dir="rtl">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title data-lang="ar">دليل قتل الشبكات الاجتماعية</title>
+    <title data-lang="en" style="display: none;">Social Media Deletion Guide</title>
+    <title data-lang="fr" style="display: none;">Guide de Suppression des Réseaux Sociaux</title>
+    <link rel="icon" type="image/png" href="https://assets.techcampus.com/8c57bde003cbd2aacd5c362ea69a6e97.png">
+    <script src="https://kit.fontawesome.com/4535b9971a.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Main Styles (Consolidated into a single file) -->
+    <link rel="stylesheet" href="css/components.css">
+</head>
+      
+
+
+<body>
+    <div class="wrapper">
+        <header class="header-section hero-section">
+            <div class="hero-background-effects" aria-hidden="true">
+                <div class="glow-circle glow-1"></div>
+                <div class="glow-circle glow-2"></div>
+                <div class="glow-circle glow-3"></div>
+                <div class="floating-shape fs-1"></div>
+                <div class="floating-shape fs-2"></div>
+                <div class="floating-shape fs-3"></div>
+            </div>
+            <div class="language-selector">
+                <button class="language-btn" id="languageBtn">
+                    <i class="fas fa-globe"></i>
+                    <span id="currentLang">العربية</span>
+                    <i class="fas fa-chevron-down ms-1"></i>
+                </button>
+                <div class="language-dropdown" id="languageDropdown">
+                    <div class="language-option active" data-lang="ar">
+                        <i class="fas fa-flag"></i> العربية
+                    </div>
+                    <div class="language-option" data-lang="en">
+                        <i class="fas fa-flag"></i> English
+                    </div>
+                    <div class="language-option" data-lang="fr">
+                        <i class="fas fa-flag"></i> Français
+                    </div>
+                    <div class="language-option" data-lang="tr">
+                        <i class="fas fa-flag"></i> Türkçe
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-content animate-on-scroll">
+                <div class="logo-container hero-logo-wrapper" data-tilt>
+                    <div class="logo-ring"></div>
+                    <img src="https://users.techcampus.com/183b9655ab99d4f0045825c593995dc5.png" alt="Logo" class="img-fluid hero-logo">
+                </div>
+                <h1 class="main-title hero-title gradient-text" data-key="title">دليل قتل الشبكات الاجتماعية</h1>
+                <p class="main-description hero-description" data-key="description">
+                    دليل متكامل للتعامل مع حسابك في كل الشبكات الاجتماعية وحذفها بشكل كامل، اضغط على الشبكة المطلوبة لمشاهدة المصادر الخاصة بها، جمع بواسطة 
+                    <a href="https://github.com/imedkablavi" class="author-link highlight-link" target="_blank" data-key="author">imed_kablavi</a>
+                </p>
+                <div class="hero-stats-badges" id="heroBadges">
+                    <div class="hs-badge" data-badge="platforms"><i class="fas fa-layer-group"></i><span id="platformCountHero">9</span></div>
+                    <div class="hs-badge" data-badge="resources"><i class="fas fa-link"></i><span id="resourceCountHero">32</span></div>
+                    <div class="hs-badge" data-badge="selected"><i class="fas fa-check"></i><span id="selectedCountHero">0</span></div>
+                </div>
+                <div class="scroll-indicator" aria-hidden="true">
+                    <span class="mouse"></span>
+                    <span class="scroll-text" data-key="scrollHint">اسحب للأسفل</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="content-section">
+            <div class="search-container">
+                <div class="search-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <input type="text" class="search-input" id="searchInput" data-key-placeholder="search">
+            </div>
+
+            <div class="stats-section">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-number" id="platformCount">9</span>
+                        <span class="stat-label" data-key="statPlatforms">منصات</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="resourceCount">32</span>
+                        <span class="stat-label" data-key="statResources">مورد</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="selectedCount">0</span>
+                        <span class="stat-label" data-key="statSelected">محدد</span>
+                    </div>
+                </div>
+            </div>
+
+            <button class="reset-btn" id="resetBtn" data-key="reset">
+                <i class="fas fa-refresh me-2"></i>
+                إعادة تعيين
+            </button>
+
+            <section class="platforms-section">
+                <div id="platformsGrid" class="platforms-grid"></div>
+            </section>
+
+            <section class="resources-section" id="resourcesSection">
+                <div id="resourcesGrid" class="resources-grid"></div>
+            </section>
+
+            <div class="no-results" id="noResults">
+                <div class="no-results-icon"><i class="fas fa-search"></i></div>
+                <h3 data-key="noResults">لا توجد نتائج</h3>
+                <p data-key="noResultsDesc">لم يتم العثور على موارد لهذه الشبكة</p>
+            </div>
+        </main>
+
+        <div class="fab-help tooltip" data-tooltip="المساعدة">
+            <i class="fas fa-question"></i>
+        </div>
+
+        <footer class="footer-section">
+            <button class="footer-top-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+                <i class="fas fa-arrow-up"></i><span>Top</span>
+            </button>
+            <div class="footer-inner">
+                <p class="footer-text">
+                    <span>&copy; <span id="footerYear">2025</span> </span>
+                    <span data-key="copyright">جميع الحقوق محفوظة</span>
+                    <span> &mdash; </span>
+                    <a href="https://guns.lol/imedkablavi" target="_blank" rel="noopener noreferrer" class="highlight-link" data-key="developerLabel" aria-label="Developer">المطوّر</a>
+                </p>
+                <div class="footer-marquee-wrapper" aria-hidden="true">
+                    <div class="footer-marquee-track" id="footerMarqueeTrack">
+                        <div class="footer-marquee-item"><i class="fas fa-shield-alt"></i><span>Privacy Focus</span></div>
+                        <div class="footer-marquee-item"><i class="fas fa-globe"></i><span>Multi-Language</span></div>
+                        <div class="footer-marquee-item"><i class="fas fa-bolt"></i><span>Fast Access</span></div>
+                        <div class="footer-marquee-item"><i class="fas fa-lock"></i><span>Security Links</span></div>
+                        <div class="footer-marquee-item"><i class="fas fa-magic"></i><span>Animated UI</span></div>
+                        <div class="footer-marquee-item"><i class="fab fa-github"></i><span>@imedkablavi</span></div>
+                        <div class="footer-marquee-item"><i class="fas fa-language"></i><span>RTL / LTR</span></div>
+                        <div class="footer-marquee-item"><i class="fas fa-database"></i><span>Data Export Guides</span></div>
+                        <div class="footer-marquee-item"><i class="fas fa-user-shield"></i><span>Account Deletion</span></div>
+                        <div class="footer-marquee-item"><i class="fas fa-recycle"></i><span>Clean Design</span></div>
+                        <!-- Duplicate set for seamless scroll -->
+                        <div class="footer-marquee-item"><i class="fas fa-shield-alt"></i><span>Privacy Focus</span></div>
+                        <div class="footer-marquee-item"><i class="fas fa-globe"></i><span>Multi-Language</span></div>
+                        <div class="footer-marquee-item"><i class="fas fa-bolt"></i><span>Fast Access</span></div>
+                        <div class="footer-marquee-item"><i class="fas fa-lock"></i><span>Security Links</span></div>
+                        <div class="footer-marquee-item"><i class="fas fa-magic"></i><span>Animated UI</span></div>
+                        <div class="footer-marquee-item"><i class="fab fa-github"></i><span>@imedkablavi</span></div>
+                        <div class="footer-marquee-item"><i class="fas fa-language"></i><span>RTL / LTR</span></div>
+                        <div class="footer-marquee-item"><i class="fas fa-database"></i><span>Data Export Guides</span></div>
+                        <div class="footer-marquee-item"><i class="fas fa-user-shield"></i><span>Account Deletion</span></div>
+                        <div class="footer-marquee-item"><i class="fas fa-recycle"></i><span>Clean Design</span></div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="js/translations.js"></script>
+    <script src="js/platforms.js"></script>
+    <script src="js/language-manager.js"></script>
+    <script src="js/ui-manager.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

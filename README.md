@@ -1,67 +1,66 @@
-<div align="center">
-<h1>🛡️ Social Media Deletion Guide<br>دليل حذف وإدارة الحسابات</h1>
-<p><strong>Find • Export • Secure • Delete</strong><br>Multi‑language privacy toolkit to reach official deletion / backup / security pages fast.</p>
-<p>
-<img src="https://img.shields.io/badge/Platforms-50%2B-blueviolet" />
-<img src="https://img.shields.io/badge/Languages-AR | EN | FR | TR-green" />
-<img src="https://img.shields.io/badge/Design-Animated%20UI-orange" />
-</p>
-</div>
+# Social Media Deletion Guide
 
+A static web project maintained in the `imedkablavi/Social-Media-Deletion-Guide` repository.
 
-## ✨ Features
-- 🌍 **4 Languages**: Arabic (RTL), English, French, Turkish  
-- 🗂️ **50+ Platforms**: Social, Messaging, Gaming, Productivity, Services  
-- 🔎 **Smart Search** + Live Stats + Animated Counters  
-- 📚 **Organized Resources**: Delete • Backup • Security • Settings • Guides • Tools  
-- 🎨 **Modern UI**: Hero animations, glass effects, glowing layers, animated footer  
-- ♿ **Accessibility**: RTL/LTR aware, semantic HTML, color-contrast checked  
+## Features
 
----
+- Repository structure has been documented from the currently tracked files.
 
-## 📂 Project Structure
-/
-├─ css/components.css # Styling (layout, animations, cards, footer)
-├─ js/translations.js # i18n content (AR/EN/FR/TR)
-├─ js/language-manager.js # Language detection + switching
-├─ js/platforms.js # Platforms + categorized resources
-├─ js/ui-manager.js # Rendering + animations
-├─ js/app.js # Initialization + lifecycle
-└─ index.html # Main document
+## Tech Stack
 
-## 🚀 Live Demo
+- Project files detected from repository contents
 
-Visit the live demo: [Social Media Deletion Guide](https://imedkablavi.github.io/Social-Media-Deletion-Guide/)
+## Project Structure
 
----
+```text
+.github/
+.gitignore
+css/
+index.html
+js/
+README.md
+```
 
-## 🌍 Internationalization
-- Auto-detects browser language.  
-- Arabic triggers **RTL layout**.  
-- Easily extend by editing `translations.js` + `language-manager.js`.  
+## Installation
 
----
+```bash
+No dependency installation command was detected.
+```
 
-## 🚀 Deployment
-- Fully static. Works on **GitHub Pages, Netlify, Vercel**.  
+## Development
 
+- No development command was detected from tracked files.
 
----
+## Build
 
-## 🤝 Contributing
-- Add new platforms in `platforms.js`.  
-- Add translations in `translations.js`.  
-- Fork → Extend → Pull Request.  
+No build command was detected from tracked files.
 
----
+## Tests
 
-## 📜 License
-[MIT License](LICENSE) © [Imed Kablavi](https://github.com/imedkablavi)
+No test command was detected from tracked files.
 
----
+## Environment Variables
 
-## 💰 Support
-If you like this project, you can support me here:  
+Use `.env.example` as the starting point when environment variables are required. Keep real secrets out of git.
 
-[![BuyMeACoffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/imed_kablavi)
+- No required environment variables were detected from tracked files.
 
+## Screenshots
+
+Add screenshots or screen recordings here when the UI is ready to document visually.
+
+## Status
+
+- README generated from the current repository files.
+- Runtime behavior should be verified in the target environment before production use.
+
+## Roadmap / TODO
+
+- Keep this README aligned with future code changes.
+- Add setup notes for deployment environments when they are finalized.
+- Add or expand automated tests when project behavior is stable.
+
+## Author
+
+Author: iEmmAd / cybrex  
+GitHub: [imedkablavi](https://github.com/imedkablavi)

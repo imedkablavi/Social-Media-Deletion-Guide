@@ -44,6 +44,7 @@ jobs:
             --exclude '^https://accountscenter\.instagram\.com/'
             --exclude '^https://www\.netflix\.com/account'
             --exclude '^https://www\.paypal\.com/myaccount/'
+            --exclude '^https://www\.amazon\.com/hz/privacy-central/data-requests/preview\.html$'
             --exclude '^https://myaccount\.ea\.com/'
             --exclude '^https://account\.battle\.net/'
             --exclude '^https://id\.atlassian\.com/'

@@ -35,14 +35,10 @@
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/professional.css">
 </head>
-
 <body>
     <div class="wrapper">
         <nav class="site-nav" aria-label="Primary navigation">
-            <a class="brand-mark" href="#top" aria-label="Account Deletion Guide home">
-                <i class="fas fa-user-shield"></i>
-                <span>Account Deletion Guide</span>
-            </a>
+            <a class="brand-mark" href="#top" aria-label="Account Deletion Guide home"><i class="fas fa-user-shield"></i><span>Account Deletion Guide</span></a>
             <div class="nav-actions">
                 <a class="nav-link-btn" href="#directory">Directory</a>
                 <button class="nav-link-btn" id="showAiOnly" type="button"><i class="fas fa-wand-magic-sparkles"></i> AI Services</button>
@@ -52,50 +48,26 @@
 
         <header class="header-section hero-section" id="top">
             <div class="hero-background-effects" aria-hidden="true">
-                <div class="glow-circle glow-1"></div>
-                <div class="glow-circle glow-2"></div>
-                <div class="glow-circle glow-3"></div>
-                <div class="floating-shape fs-1"></div>
-                <div class="floating-shape fs-2"></div>
-                <div class="floating-shape fs-3"></div>
+                <div class="glow-circle glow-1"></div><div class="glow-circle glow-2"></div><div class="glow-circle glow-3"></div>
+                <div class="floating-shape fs-1"></div><div class="floating-shape fs-2"></div><div class="floating-shape fs-3"></div>
             </div>
-
             <div class="language-selector">
-                <button class="language-btn" id="languageBtn" type="button" aria-label="Change language">
-                    <i class="fas fa-globe"></i>
-                    <span id="currentLang">English</span>
-                    <i class="fas fa-chevron-down ms-1"></i>
-                </button>
+                <button class="language-btn" id="languageBtn" type="button" aria-label="Change language"><i class="fas fa-globe"></i><span id="currentLang">English</span><i class="fas fa-chevron-down ms-1"></i></button>
                 <div class="language-dropdown" id="languageDropdown">
-                    <div class="language-option" data-lang="ar">العربية</div>
-                    <div class="language-option active" data-lang="en">English</div>
-                    <div class="language-option" data-lang="fr">Français</div>
-                    <div class="language-option" data-lang="tr">Türkçe</div>
+                    <div class="language-option" data-lang="ar">العربية</div><div class="language-option active" data-lang="en">English</div><div class="language-option" data-lang="fr">Français</div><div class="language-option" data-lang="tr">Türkçe</div>
                 </div>
             </div>
-
             <div class="hero-content animate-on-scroll">
-                <div class="logo-container hero-logo-wrapper" data-tilt>
-                    <div class="logo-ring"></div>
-                    <img src="https://users.techcampus.com/183b9655ab99d4f0045825c593995dc5.png" alt="Account Deletion Guide Logo" class="img-fluid hero-logo">
-                </div>
-
+                <div class="logo-container hero-logo-wrapper" data-tilt><div class="logo-ring"></div><img src="https://users.techcampus.com/183b9655ab99d4f0045825c593995dc5.png" alt="Account Deletion Guide Logo" class="img-fluid hero-logo"></div>
                 <div class="hero-kicker"><i class="fas fa-circle-check"></i> Maintained privacy directory</div>
                 <h1 class="main-title hero-title gradient-text" data-key="title">Account Deletion & Privacy Guide</h1>
-                <p class="main-description hero-description">
-                    <span data-key="description">Find official account deletion, data export, AI activity, security and privacy controls without digging through support pages.</span>
-                </p>
-
+                <p class="main-description hero-description"><span data-key="description">Find official account deletion, data export, AI activity, security and privacy controls without digging through support pages.</span></p>
                 <div class="hero-stats-badges" id="heroBadges" aria-label="Directory statistics">
                     <div class="hs-badge"><i class="fas fa-layer-group"></i><span id="platformCountHero">0</span><small> services</small></div>
                     <div class="hs-badge"><i class="fas fa-link"></i><span id="resourceCountHero">0</span><small> resources</small></div>
                     <div class="hs-badge"><i class="fas fa-check"></i><span id="selectedCountHero">0</span><small> selected</small></div>
                 </div>
-
-                <div class="scroll-indicator" aria-hidden="true">
-                    <span class="mouse"></span>
-                    <span class="scroll-text" data-key="scrollHint">Explore Directory</span>
-                </div>
+                <div class="scroll-indicator" aria-hidden="true"><span class="mouse"></span><span class="scroll-text" data-key="scrollHint">Explore Directory</span></div>
             </div>
         </header>
 
@@ -108,103 +80,47 @@
             </section>
 
             <section class="ai-spotlight" aria-label="AI services spotlight">
-                <div>
-                    <strong><i class="fas fa-wand-magic-sparkles"></i> AI services now have dedicated privacy actions</strong>
-                    <p>ChatGPT, Claude, Gemini, Perplexity, Copilot, Mistral, Character.AI, ElevenLabs and Poe are separated from generic service links.</p>
-                </div>
-                <button id="showAiOnly" type="button" onclick="document.querySelector('[data-category-filter=\"ai\"]')?.click()">Browse AI services</button>
+                <div><strong><i class="fas fa-wand-magic-sparkles"></i> AI services now have dedicated privacy actions</strong><p>ChatGPT, Claude, Gemini, Perplexity, Copilot, Mistral, Character.AI, ElevenLabs and Poe are separated from generic service links.</p></div>
+                <button type="button" onclick="document.querySelector('[data-category-filter=\"ai\"]')?.click()">Browse AI services</button>
             </section>
 
             <section class="directory-shell" aria-label="Account deletion directory">
                 <div class="directory-toolbar">
                     <div class="toolbar-top">
-                        <div class="search-container">
-                            <div class="search-icon"><i class="fas fa-search"></i></div>
-                            <input type="search" class="search-input" id="searchInput" data-key-placeholder="search" placeholder="Search ChatGPT, Instagram, Discord, Google..." aria-label="Search platforms and resources" autocomplete="off">
-                        </div>
-                        <div class="toolbar-meta">
-                            <span class="result-pill" id="resultCount">0 services</span>
-                            <span class="result-pill" id="verifiedCount">0 official links</span>
-                        </div>
+                        <div class="search-container"><div class="search-icon"><i class="fas fa-search"></i></div><input type="search" class="search-input" id="searchInput" data-key-placeholder="search" placeholder="Search ChatGPT, Instagram, Discord, Google..." aria-label="Search platforms and resources" autocomplete="off"></div>
+                        <div class="toolbar-meta"><span class="result-pill" id="resultCount">0 services</span><span class="result-pill" id="verifiedCount">0 official links</span></div>
                     </div>
-
                     <div class="filter-row" aria-label="Category filters">
                         <button type="button" class="filter-chip active" data-category-filter="all">All</button>
                         <button type="button" class="filter-chip" data-category-filter="ai"><i class="fas fa-wand-magic-sparkles"></i> AI</button>
                         <button type="button" class="filter-chip" data-category-filter="social"><i class="fas fa-hashtag"></i> Social</button>
                         <button type="button" class="filter-chip" data-category-filter="messaging"><i class="fas fa-comment"></i> Messaging</button>
-                        <button type="button" class="filter-chip" data-category-filter="service"><i class="fas fa-grid-2"></i> Services</button>
+                        <button type="button" class="filter-chip" data-category-filter="service"><i class="fas fa-layer-group"></i> Services</button>
                         <button type="button" class="filter-chip" data-category-filter="security"><i class="fas fa-shield-halved"></i> Security</button>
-                        <select class="filter-select" id="difficultyFilter" aria-label="Deletion difficulty">
-                            <option value="all">Any difficulty</option>
-                            <option value="easy">Easy deletion</option>
-                            <option value="medium">Medium deletion</option>
-                            <option value="hard">Hard deletion</option>
-                        </select>
+                        <select class="filter-select" id="difficultyFilter" aria-label="Deletion difficulty"><option value="all">Any difficulty</option><option value="easy">Easy deletion</option><option value="medium">Medium deletion</option><option value="hard">Hard deletion</option></select>
                     </div>
                 </div>
-
                 <button class="reset-btn" id="resetBtn" type="button" data-key="reset"><i class="fas fa-rotate-left me-2"></i>Reset</button>
-
-                <section class="platforms-section" aria-label="Platforms">
-                    <div id="platformsGrid" class="platforms-grid"></div>
-                </section>
-
-                <section class="resources-section" id="resourcesSection" aria-live="polite">
-                    <div id="resourcesGrid" class="resources-grid"></div>
-                </section>
-
-                <div class="no-results" id="noResults" role="status">
-                    <div class="no-results-icon"><i class="fas fa-search"></i></div>
-                    <h3 data-key="noResults">No Results</h3>
-                    <p data-key="noResultsDesc">Try another search or clear the filters.</p>
-                </div>
+                <section class="platforms-section" aria-label="Platforms"><div id="platformsGrid" class="platforms-grid"></div></section>
+                <section class="resources-section" id="resourcesSection" aria-live="polite"><div id="resourcesGrid" class="resources-grid"></div></section>
+                <div class="no-results" id="noResults" role="status"><div class="no-results-icon"><i class="fas fa-search"></i></div><h3 data-key="noResults">No Results</h3><p data-key="noResultsDesc">Try another search or clear the filters.</p></div>
             </section>
-
-            <div class="stats-section" aria-hidden="true">
-                <span id="platformCount">0</span><span id="resourceCount">0</span><span id="selectedCount">0</span>
-            </div>
+            <div class="stats-section" aria-hidden="true"><span id="platformCount">0</span><span id="resourceCount">0</span><span id="selectedCount">0</span></div>
         </main>
 
         <div class="fab-help tooltip" data-tooltip="Help" tabindex="0" role="button" aria-label="Help"><i class="fas fa-question"></i></div>
-
         <footer class="footer-section">
             <button class="footer-top-btn" type="button" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fas fa-arrow-up"></i><span>Top</span></button>
             <div class="footer-inner">
-                <p class="footer-text">
-                    <span>&copy; <span id="footerYear">2026</span></span>
-                    <span> — </span>
-                    <a href="https://github.com/imedkablavi" target="_blank" rel="noopener noreferrer" class="highlight-link">imedkablavi</a>
-                    <span> — Official links, not account credentials.</span>
-                </p>
-                <div class="footer-marquee-wrapper" aria-hidden="true">
-                    <div class="footer-marquee-track" id="footerMarqueeTrack">
-                        <div class="footer-marquee-item"><i class="fas fa-shield-alt"></i><span>Official Sources</span></div>
-                        <div class="footer-marquee-item"><i class="fas fa-wand-magic-sparkles"></i><span>AI Privacy</span></div>
-                        <div class="footer-marquee-item"><i class="fas fa-link"></i><span>Link Monitoring</span></div>
-                        <div class="footer-marquee-item"><i class="fas fa-database"></i><span>Data Export</span></div>
-                        <div class="footer-marquee-item"><i class="fas fa-user-shield"></i><span>Account Deletion</span></div>
-                        <div class="footer-marquee-item"><i class="fas fa-language"></i><span>AR / EN / FR / TR</span></div>
-                        <div class="footer-marquee-item"><i class="fas fa-shield-alt"></i><span>Official Sources</span></div>
-                        <div class="footer-marquee-item"><i class="fas fa-wand-magic-sparkles"></i><span>AI Privacy</span></div>
-                        <div class="footer-marquee-item"><i class="fas fa-link"></i><span>Link Monitoring</span></div>
-                        <div class="footer-marquee-item"><i class="fas fa-database"></i><span>Data Export</span></div>
-                        <div class="footer-marquee-item"><i class="fas fa-user-shield"></i><span>Account Deletion</span></div>
-                        <div class="footer-marquee-item"><i class="fas fa-language"></i><span>AR / EN / FR / TR</span></div>
-                    </div>
-                </div>
+                <p class="footer-text"><span>&copy; <span id="footerYear">2026</span></span><span> — </span><a href="https://github.com/imedkablavi" target="_blank" rel="noopener noreferrer" class="highlight-link">imedkablavi</a><span> — Official links, not account credentials.</span></p>
+                <div class="footer-marquee-wrapper" aria-hidden="true"><div class="footer-marquee-track" id="footerMarqueeTrack">
+                    <div class="footer-marquee-item"><i class="fas fa-shield-alt"></i><span>Official Sources</span></div><div class="footer-marquee-item"><i class="fas fa-wand-magic-sparkles"></i><span>AI Privacy</span></div><div class="footer-marquee-item"><i class="fas fa-link"></i><span>Link Monitoring</span></div><div class="footer-marquee-item"><i class="fas fa-database"></i><span>Data Export</span></div><div class="footer-marquee-item"><i class="fas fa-user-shield"></i><span>Account Deletion</span></div><div class="footer-marquee-item"><i class="fas fa-language"></i><span>AR / EN / FR / TR</span></div>
+                    <div class="footer-marquee-item"><i class="fas fa-shield-alt"></i><span>Official Sources</span></div><div class="footer-marquee-item"><i class="fas fa-wand-magic-sparkles"></i><span>AI Privacy</span></div><div class="footer-marquee-item"><i class="fas fa-link"></i><span>Link Monitoring</span></div><div class="footer-marquee-item"><i class="fas fa-database"></i><span>Data Export</span></div><div class="footer-marquee-item"><i class="fas fa-user-shield"></i><span>Account Deletion</span></div><div class="footer-marquee-item"><i class="fas fa-language"></i><span>AR / EN / FR / TR</span></div>
+                </div></div>
             </div>
         </footer>
     </div>
 
-    <script src="js/translations.js"></script>
-    <script src="js/translations-updates.js"></script>
-    <script src="js/platforms.js"></script>
-    <script src="js/catalog-updates.js"></script>
-    <script src="js/ai-catalog.js"></script>
-    <script src="js/language-manager.js"></script>
-    <script src="js/ui-manager.js"></script>
-    <script src="js/pro-ui.js"></script>
-    <script src="js/app.js"></script>
+    <script src="js/translations.js"></script><script src="js/translations-updates.js"></script><script src="js/platforms.js"></script><script src="js/catalog-updates.js"></script><script src="js/ai-catalog.js"></script><script src="js/language-manager.js"></script><script src="js/ui-manager.js"></script><script src="js/pro-ui.js"></script><script src="js/app.js"></script>
 </body>
 </html>

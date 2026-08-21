@@ -32,6 +32,7 @@ jobs:
             --max-retries 2
             --timeout 20
             --accept 200,204,206,301,302,303,307,308,401,403,405,429
+            --exclude '^https://cdn\.simpleicons\.org/'
             --exclude '^https://accounts\.snapchat\.com/'
             --exclude '^https://my\.telegram\.org/'
             --exclude '^https://discord\.com/settings/'

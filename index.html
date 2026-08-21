@@ -1,55 +1,44 @@
-<!DOCTYPE html> 
-<html lang="ar" data-dir="rtl">
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <!-- Single canonical title (will be dynamically changed by JS for i18n) -->
-    <title>دليل حذف وإدارة حسابات وسائل التواصل الاجتماعي</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Primary Meta Description (Arabic default; JS updates per language) -->
-    <meta name="description" content="دليل عربي شامل يوفّر روابط مباشرة لحذف أو تعطيل أو إدارة وحماية حساباتك في أشهر منصات التواصل والخدمات مثل تويتر، انستجرام، فيسبوك، جوجل، لينكدإن، سبوتيفاي، نتفلكس وغيرها مع روابط النسخ الاحتياطي والأمان." />
+    <title>دليل حذف الحسابات وحماية الخصوصية</title>
+    <meta name="description" content="دليل عملي للوصول إلى صفحات حذف الحسابات، تنزيل البيانات، الأمان والخصوصية من المصادر الرسمية لأشهر المنصات والخدمات.">
+    <meta name="robots" content="index,follow,max-image-preview:large">
+    <meta name="author" content="imed_kablavi">
+    <meta name="theme-color" content="#0f172a">
 
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://alosefer.com/" />
+    <link rel="canonical" href="https://imedkablavi.github.io/Social-Media-Deletion-Guide/">
 
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="ar_AR" />
-    <meta property="og:site_name" content="Account Deletion Guide" />
-    <meta property="og:title" content="دليل حذف وإدارة حسابات وسائل التواصل الاجتماعي" />
-    <meta property="og:description" content="دليل شامل وروابط مباشرة لحذف أو إدارة حساباتك وحماية خصوصيتك على المنصات المختلفة." />
-    <meta property="og:url" content="https://alosefer.com/" />
-    <meta property="og:image" content="https://users.techcampus.com/183b9655ab99d4f0045825c593995dc5.png" />
-    <meta property="og:image:alt" content="شعار الدليل" />
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Account Deletion & Privacy Guide">
+    <meta property="og:title" content="Account Deletion & Privacy Guide">
+    <meta property="og:description" content="Official account deletion, data export, security and privacy links for popular online services.">
+    <meta property="og:url" content="https://imedkablavi.github.io/Social-Media-Deletion-Guide/">
 
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="دليل حذف وإدارة الحسابات" />
-    <meta name="twitter:description" content="دليل شامل وروابط مباشرة لحذف أو إدارة حساباتك وحماية خصوصيتك على المنصات المختلفة." />
-    <meta name="twitter:image" content="https://users.techcampus.com/183b9655ab99d4f0045825c593995dc5.png" />
-    <meta name="twitter:creator" content="@imedkablavi" />
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Account Deletion & Privacy Guide">
+    <meta name="twitter:description" content="Official account deletion, data export, security and privacy links for popular online services.">
 
-    <!-- Additional SEO Meta -->
-    <meta name="robots" content="index, follow" />
-    <meta name="author" content="imed_kablavi" />
-    <meta name="keywords" content="حذف حساب, حذف تويتر, حذف فيسبوك, حذف انستقرام, حذف حساب سناب, حذف حساب تليجرام, delete account, social media deletion, account removal, privacy, data export" />
-    <link rel="icon" type="image/png" href="https://assets.techcampus.com/8c57bde003cbd2aacd5c362ea69a6e97.png">
     <script src="https://kit.fontawesome.com/4535b9971a.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Main Styles (Consolidated into a single file) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/components.css">
+
+    <style>
+        .maintenance-note{max-width:980px;margin:1.5rem auto 0;padding:1rem 1.2rem;border:1px solid rgba(99,102,241,.2);border-radius:16px;background:rgba(255,255,255,.78);backdrop-filter:blur(10px);color:#334155;display:flex;gap:.8rem;align-items:flex-start;line-height:1.7}
+        .maintenance-note i{color:#6366f1;margin-top:.25rem}.maintenance-note a{color:#4f46e5;font-weight:600;text-decoration:none}.maintenance-note a:hover{text-decoration:underline}
+        .skip-link{position:absolute;top:-60px;left:1rem;z-index:9999;background:#fff;color:#111827;padding:.7rem 1rem;border-radius:10px}.skip-link:focus{top:1rem}
+    </style>
 </head>
-      
-
-
 <body>
+    <a class="skip-link" href="#mainContent">Skip to content</a>
+
     <div class="wrapper">
         <header class="header-section hero-section">
             <div class="hero-background-effects" aria-hidden="true">
@@ -60,42 +49,37 @@
                 <div class="floating-shape fs-2"></div>
                 <div class="floating-shape fs-3"></div>
             </div>
+
             <div class="language-selector">
-                <button class="language-btn" id="languageBtn">
-                    <i class="fas fa-globe"></i>
+                <button class="language-btn" id="languageBtn" type="button" aria-haspopup="true" aria-label="Change language">
+                    <i class="fas fa-globe" aria-hidden="true"></i>
                     <span id="currentLang">العربية</span>
-                    <i class="fas fa-chevron-down ms-1"></i>
+                    <i class="fas fa-chevron-down ms-1" aria-hidden="true"></i>
                 </button>
                 <div class="language-dropdown" id="languageDropdown">
-                    <div class="language-option active" data-lang="ar">
-                        <i class="fas fa-flag"></i> العربية
-                    </div>
-                    <div class="language-option" data-lang="en">
-                        <i class="fas fa-flag"></i> English
-                    </div>
-                    <div class="language-option" data-lang="fr">
-                        <i class="fas fa-flag"></i> Français
-                    </div>
-                    <div class="language-option" data-lang="tr">
-                        <i class="fas fa-flag"></i> Türkçe
-                    </div>
+                    <div class="language-option active" data-lang="ar">العربية</div>
+                    <div class="language-option" data-lang="en">English</div>
+                    <div class="language-option" data-lang="fr">Français</div>
+                    <div class="language-option" data-lang="tr">Türkçe</div>
                 </div>
             </div>
 
             <div class="hero-content animate-on-scroll">
-                <div class="logo-container hero-logo-wrapper" data-tilt>
+                <div class="logo-container hero-logo-wrapper" aria-hidden="true">
                     <div class="logo-ring"></div>
-                    <img src="https://users.techcampus.com/183b9655ab99d4f0045825c593995dc5.png" alt="Logo" class="img-fluid hero-logo">
+                    <div class="hero-logo" style="display:grid;place-items:center;background:linear-gradient(135deg,#111827,#312e81);font-size:3rem;color:#fff">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
                 </div>
-                <h1 class="main-title hero-title gradient-text" data-key="title">دليل قتل الشبكات الاجتماعية</h1>
-                <p class="main-description hero-description" data-key="description">
-                    دليل متكامل للتعامل مع حسابك في كل الشبكات الاجتماعية وحذفها بشكل كامل، اضغط على الشبكة المطلوبة لمشاهدة المصادر الخاصة بها، جمع بواسطة 
-                    <a href="https://github.com/imedkablavi" class="author-link highlight-link" target="_blank" data-key="author">imed_kablavi</a>
+                <h1 class="main-title hero-title gradient-text" data-key="title">دليل حذف الحسابات وحماية الخصوصية</h1>
+                <p class="main-description hero-description">
+                    <span data-key="description">دليل عملي للوصول إلى صفحات حذف الحسابات، تنزيل البيانات، الأمان والخصوصية من المصادر الرسمية لأشهر المنصات والخدمات.</span>
+                    <a href="https://github.com/imedkablavi" class="author-link highlight-link" target="_blank" rel="noopener noreferrer">imed_kablavi</a>
                 </p>
-                <div class="hero-stats-badges" id="heroBadges">
-                    <div class="hs-badge" data-badge="platforms"><i class="fas fa-layer-group"></i><span id="platformCountHero">9</span></div>
-                    <div class="hs-badge" data-badge="resources"><i class="fas fa-link"></i><span id="resourceCountHero">32</span></div>
-                    <div class="hs-badge" data-badge="selected"><i class="fas fa-check"></i><span id="selectedCountHero">0</span></div>
+                <div class="hero-stats-badges" id="heroBadges" aria-label="Directory statistics">
+                    <div class="hs-badge"><i class="fas fa-layer-group"></i><span id="platformCountHero">0</span></div>
+                    <div class="hs-badge"><i class="fas fa-link"></i><span id="resourceCountHero">0</span></div>
+                    <div class="hs-badge"><i class="fas fa-check"></i><span id="selectedCountHero">0</span></div>
                 </div>
                 <div class="scroll-indicator" aria-hidden="true">
                     <span class="mouse"></span>
@@ -104,98 +88,65 @@
             </div>
         </header>
 
-        <main class="content-section">
-            <div class="search-container">
-                <div class="search-icon">
-                    <i class="fas fa-search"></i>
+        <main class="content-section" id="mainContent">
+            <div class="maintenance-note">
+                <i class="fas fa-circle-check" aria-hidden="true"></i>
+                <div>
+                    <span data-key="verificationNote">نفضّل الروابط الرسمية ونراجع الروابط دوريًا. بعض الخدمات تتطلب تسجيل الدخول قبل ظهور خيار الحذف.</span>
+                    <a href="https://github.com/imedkablavi/Social-Media-Deletion-Guide/issues/new" target="_blank" rel="noopener noreferrer" data-key="reportBroken">وجدت رابطًا لا يعمل؟ بلّغ عنه على GitHub.</a>
                 </div>
-                <input type="text" class="search-input" id="searchInput" data-key-placeholder="search">
+            </div>
+
+            <div class="search-container">
+                <div class="search-icon"><i class="fas fa-search" aria-hidden="true"></i></div>
+                <label class="visually-hidden" for="searchInput">Search platforms</label>
+                <input type="search" class="search-input" id="searchInput" autocomplete="off" data-key-placeholder="search" placeholder="ابحث عن منصة...">
             </div>
 
             <div class="stats-section">
                 <div class="stats-grid">
-                    <div class="stat-item">
-                        <span class="stat-number" id="platformCount">9</span>
-                        <span class="stat-label" data-key="statPlatforms">منصات</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number" id="resourceCount">32</span>
-                        <span class="stat-label" data-key="statResources">مورد</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number" id="selectedCount">0</span>
-                        <span class="stat-label" data-key="statSelected">محدد</span>
-                    </div>
+                    <div class="stat-item"><span class="stat-number" id="platformCount">0</span><span class="stat-label" data-key="statPlatforms">منصات</span></div>
+                    <div class="stat-item"><span class="stat-number" id="resourceCount">0</span><span class="stat-label" data-key="statResources">مورد</span></div>
+                    <div class="stat-item"><span class="stat-number" id="selectedCount">0</span><span class="stat-label" data-key="statSelected">محدد</span></div>
                 </div>
             </div>
 
-            <button class="reset-btn" id="resetBtn" data-key="reset">
-                <i class="fas fa-refresh me-2"></i>
-                إعادة تعيين
-            </button>
+            <button class="reset-btn" id="resetBtn" type="button" data-key="reset"><i class="fas fa-refresh me-2" aria-hidden="true"></i>إعادة تعيين</button>
 
-            <section class="platforms-section">
+            <section class="platforms-section" aria-label="Platforms">
                 <div id="platformsGrid" class="platforms-grid"></div>
             </section>
 
-            <section class="resources-section" id="resourcesSection">
+            <section class="resources-section" id="resourcesSection" aria-live="polite">
                 <div id="resourcesGrid" class="resources-grid"></div>
             </section>
 
-            <div class="no-results" id="noResults">
+            <div class="no-results" id="noResults" role="status">
                 <div class="no-results-icon"><i class="fas fa-search"></i></div>
                 <h3 data-key="noResults">لا توجد نتائج</h3>
-                <p data-key="noResultsDesc">لم يتم العثور على موارد لهذه الشبكة</p>
+                <p data-key="noResultsDesc">لم يتم العثور على موارد لهذه المنصة</p>
             </div>
         </main>
 
-        <div class="fab-help tooltip" data-tooltip="المساعدة">
-            <i class="fas fa-question"></i>
-        </div>
+        <div class="fab-help tooltip" data-tooltip="Help" tabindex="0" role="button" aria-label="Help"><i class="fas fa-question"></i></div>
 
         <footer class="footer-section">
-            <button class="footer-top-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">
-                <i class="fas fa-arrow-up"></i><span>Top</span>
-            </button>
+            <button class="footer-top-btn" type="button" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fas fa-arrow-up"></i><span>Top</span></button>
             <div class="footer-inner">
                 <p class="footer-text">
-                    <span>&copy; <span id="footerYear">2025</span> </span>
+                    <span>&copy; <span id="footerYear"></span></span>
                     <span data-key="copyright">جميع الحقوق محفوظة</span>
-                    <span> &mdash; </span>
-                    <a href="https://guns.lol/imedkablavi" target="_blank" rel="noopener noreferrer" class="highlight-link" data-key="developerLabel" aria-label="Developer">المطوّر</a>
+                    <span> — </span>
+                    <a href="https://github.com/imedkablavi" target="_blank" rel="noopener noreferrer" class="highlight-link" data-key="developerLabel">المطوّر</a>
                 </p>
-                <div class="footer-marquee-wrapper" aria-hidden="true">
-                    <div class="footer-marquee-track" id="footerMarqueeTrack">
-                        <div class="footer-marquee-item"><i class="fas fa-shield-alt"></i><span>Privacy Focus</span></div>
-                        <div class="footer-marquee-item"><i class="fas fa-globe"></i><span>Multi-Language</span></div>
-                        <div class="footer-marquee-item"><i class="fas fa-bolt"></i><span>Fast Access</span></div>
-                        <div class="footer-marquee-item"><i class="fas fa-lock"></i><span>Security Links</span></div>
-                        <div class="footer-marquee-item"><i class="fas fa-magic"></i><span>Animated UI</span></div>
-                        <div class="footer-marquee-item"><i class="fab fa-github"></i><span>@imedkablavi</span></div>
-                        <div class="footer-marquee-item"><i class="fas fa-language"></i><span>RTL / LTR</span></div>
-                        <div class="footer-marquee-item"><i class="fas fa-database"></i><span>Data Export Guides</span></div>
-                        <div class="footer-marquee-item"><i class="fas fa-user-shield"></i><span>Account Deletion</span></div>
-                        <div class="footer-marquee-item"><i class="fas fa-recycle"></i><span>Clean Design</span></div>
-                        <!-- Duplicate set for seamless scroll -->
-                        <div class="footer-marquee-item"><i class="fas fa-shield-alt"></i><span>Privacy Focus</span></div>
-                        <div class="footer-marquee-item"><i class="fas fa-globe"></i><span>Multi-Language</span></div>
-                        <div class="footer-marquee-item"><i class="fas fa-bolt"></i><span>Fast Access</span></div>
-                        <div class="footer-marquee-item"><i class="fas fa-lock"></i><span>Security Links</span></div>
-                        <div class="footer-marquee-item"><i class="fas fa-magic"></i><span>Animated UI</span></div>
-                        <div class="footer-marquee-item"><i class="fab fa-github"></i><span>@imedkablavi</span></div>
-                        <div class="footer-marquee-item"><i class="fas fa-language"></i><span>RTL / LTR</span></div>
-                        <div class="footer-marquee-item"><i class="fas fa-database"></i><span>Data Export Guides</span></div>
-                        <div class="footer-marquee-item"><i class="fas fa-user-shield"></i><span>Account Deletion</span></div>
-                        <div class="footer-marquee-item"><i class="fas fa-recycle"></i><span>Clean Design</span></div>
-                    </div>
-                </div>
             </div>
         </footer>
     </div>
 
-    <!-- JavaScript Files -->
     <script src="js/translations.js"></script>
+    <script src="js/translations-updates.js"></script>
     <script src="js/platforms.js"></script>
+    <script src="js/catalog-updates.js"></script>
     <script src="js/language-manager.js"></script>
     <script src="js/ui-manager.js"></script>
     <script src="js/app.js"></script>

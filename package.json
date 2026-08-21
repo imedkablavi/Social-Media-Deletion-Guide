@@ -1,0 +1,12 @@
+{
+  "name": "social-media-deletion-guide",
+  "version": "3.2.1",
+  "private": true,
+  "scripts": {
+    "test:e2e": "playwright test",
+    "test:static": "python3 scripts/validate.py"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.62.1"
+  }
+}

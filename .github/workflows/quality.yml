@@ -21,14 +21,24 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Validate HTML and catalog
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Validate HTML, discovery files and catalog
         run: python scripts/validate.py
+
+      - name: Build effective user-visible URL list
+        run: |
+          node scripts/export-effective-urls.js > /tmp/effective-urls.txt
+          test "$(wc -l < /tmp/effective-urls.txt)" -ge 100
 
       - name: Check JavaScript syntax
         shell: bash
         run: |
           set -euo pipefail
-          for file in js/*.js; do
+          for file in js/*.js scripts/*.js playwright.config.js tests/*.js; do
             echo "Checking $file"
             node --check "$file"
           done

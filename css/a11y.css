@@ -1,0 +1,30 @@
+/* Final accessibility hardening kept separate from the visual theme. */
+:where(a, button, input, select):focus-visible {
+  outline: 2px solid #58a6ff;
+  outline-offset: 2px;
+}
+
+.language-option {
+  display: block;
+  width: 100%;
+  border: 0;
+  text-align: left;
+  font: inherit;
+  background: transparent;
+}
+
+[dir="rtl"] .language-option { text-align: right; }
+
+.filter-select:focus-visible,
+.search-input:focus-visible {
+  outline: 2px solid #58a6ff;
+  outline-offset: 1px;
+}
+
+@media (forced-colors: active) {
+  .platform-card.active,
+  .filter-chip.active,
+  .brand-mark-wrap {
+    border: 2px solid CanvasText;
+  }
+}

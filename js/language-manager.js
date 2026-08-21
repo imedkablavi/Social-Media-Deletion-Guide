@@ -1,14 +1,12 @@
 /**
- * Language Management System
- * Handles language detection, switching, and content updates
+ * Language management for EN / AR / FR / TR.
+ * English is the first-visit default; an explicit saved preference wins later.
  */
-
 class LanguageManager {
     constructor() {
         this.currentLang = 'en';
         this.supportedLangs = ['ar', 'en', 'fr', 'tr'];
         this.observers = [];
-
         this.init();
     }
 
@@ -16,207 +14,174 @@ class LanguageManager {
         this.detectBrowserLanguage();
         this.setupEventListeners();
         this.updateHTMLAttributes();
+        this.ensureAccessibleLabels();
     }
 
-    // Keep English as the first-visit default. A saved user preference still wins later.
     detectBrowserLanguage() {
         this.currentLang = 'en';
-        console.log('Default language: en');
     }
 
-    // Setup language dropdown event listeners
     setupEventListeners() {
         const languageBtn = document.getElementById('languageBtn');
         const languageDropdown = document.getElementById('languageDropdown');
 
-        if (languageBtn) {
-            languageBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                this.toggleLanguageDropdown();
-            });
-        }
+        languageBtn?.addEventListener('click', event => {
+            event.stopPropagation();
+            this.toggleLanguageDropdown();
+        });
 
         document.querySelectorAll('.language-option').forEach(option => {
-            option.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const lang = e.target.getAttribute('data-lang') ||
-                           e.target.closest('.language-option').getAttribute('data-lang');
-                if (lang && lang !== this.currentLang) {
-                    this.changeLanguage(lang);
-                }
+            option.addEventListener('click', event => {
+                event.stopPropagation();
+                const lang = event.currentTarget.getAttribute('data-lang');
+                if (lang && lang !== this.currentLang) this.changeLanguage(lang);
+                else this.closeLanguageDropdown();
             });
         });
 
-        document.addEventListener('click', (e) => {
-            if (languageDropdown && !languageBtn?.contains(e.target) && !languageDropdown.contains(e.target)) {
-                languageDropdown.classList.remove('show');
+        document.addEventListener('click', event => {
+            if (languageDropdown && !languageBtn?.contains(event.target) && !languageDropdown.contains(event.target)) {
+                this.closeLanguageDropdown();
             }
         });
 
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && languageDropdown) {
-                languageDropdown.classList.remove('show');
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape') {
+                const wasOpen = languageDropdown?.classList.contains('show');
+                this.closeLanguageDropdown();
+                if (wasOpen) languageBtn?.focus();
             }
         });
+    }
+
+    ensureAccessibleLabels() {
+        const githubLink = document.querySelector('.nav-github');
+        if (githubLink) githubLink.setAttribute('aria-label', 'GitHub repository');
     }
 
     toggleLanguageDropdown() {
         const dropdown = document.getElementById('languageDropdown');
-        if (dropdown) dropdown.classList.toggle('show');
+        const button = document.getElementById('languageBtn');
+        if (!dropdown) return;
+        const open = dropdown.classList.toggle('show');
+        button?.setAttribute('aria-expanded', String(open));
+        if (open) dropdown.querySelector('.language-option.active')?.focus();
+    }
+
+    closeLanguageDropdown() {
+        document.getElementById('languageDropdown')?.classList.remove('show');
+        document.getElementById('languageBtn')?.setAttribute('aria-expanded', 'false');
     }
 
     changeLanguage(newLang) {
         if (!this.supportedLangs.includes(newLang) || newLang === this.currentLang) return;
-
         const oldLang = this.currentLang;
         this.currentLang = newLang;
         this.updateHTMLAttributes();
         this.updateLanguageUI();
-
-        const dropdown = document.getElementById('languageDropdown');
-        if (dropdown) dropdown.classList.remove('show');
-
+        this.closeLanguageDropdown();
         this.notifyObservers('languageChanged', { from: oldLang, to: newLang });
         this.saveLanguagePreference(newLang);
-        console.log(`Language changed from ${oldLang} to ${newLang}`);
     }
 
     updateHTMLAttributes() {
         const html = document.documentElement;
         html.setAttribute('lang', this.currentLang);
         html.setAttribute('dir', this.currentLang === 'ar' ? 'rtl' : 'ltr');
-
-        document.body.className = document.body.className
-            .replace(/\blang-\w+\b/g, '') + ` lang-${this.currentLang}`;
+        if (document.body) {
+            document.body.className = document.body.className.replace(/\blang-\w+\b/g, '').trim();
+            document.body.classList.add(`lang-${this.currentLang}`);
+        }
     }
 
     updateLanguageUI() {
         const currentLangSpan = document.getElementById('currentLang');
-        if (currentLangSpan && languageNames) {
-            currentLangSpan.textContent = languageNames[this.currentLang];
-        }
+        if (currentLangSpan && typeof languageNames !== 'undefined') currentLangSpan.textContent = languageNames[this.currentLang];
 
         document.querySelectorAll('.language-option').forEach(option => {
-            option.classList.remove('active');
-            if (option.getAttribute('data-lang') === this.currentLang) option.classList.add('active');
+            const active = option.getAttribute('data-lang') === this.currentLang;
+            option.classList.toggle('active', active);
+            option.setAttribute('aria-current', active ? 'true' : 'false');
         });
 
         this.updateAllTextElements();
-
-        if (translations && translations[this.currentLang]) {
-            document.title = translations[this.currentLang].title;
-        }
-
+        this.ensureAccessibleLabels();
+        const langData = this.getCurrentLanguageData();
+        if (langData?.title) document.title = langData.title;
         const metaDesc = document.querySelector('meta[name="description"]');
-        if (metaDesc && translations && translations[this.currentLang]) {
-            metaDesc.setAttribute('content', translations[this.currentLang].description);
-        }
+        if (metaDesc && langData?.description) metaDesc.setAttribute('content', langData.description);
     }
 
     updateAllTextElements() {
-        if (!translations || !translations[this.currentLang]) return;
-
-        const langData = translations[this.currentLang];
+        const langData = this.getCurrentLanguageData();
+        if (!langData) return;
 
         document.querySelectorAll('[data-key]').forEach(element => {
-            const key = element.getAttribute('data-key');
-            if (langData[key]) {
-                if (element.tagName === 'INPUT' && (element.type === 'text' || element.type === 'search')) {
-                    element.placeholder = langData[key];
-                } else {
-                    element.textContent = langData[key];
-                }
-            }
+            const value = langData[element.getAttribute('data-key')];
+            if (value != null) element.textContent = value;
         });
 
-        const searchInput = document.getElementById('searchInput');
-        if (searchInput && langData.search) searchInput.placeholder = langData.search;
+        document.querySelectorAll('[data-key-placeholder]').forEach(element => {
+            const value = langData[element.getAttribute('data-key-placeholder')];
+            if (value != null) element.setAttribute('placeholder', value);
+        });
 
         document.querySelectorAll('[data-tooltip-key]').forEach(element => {
-            const key = element.getAttribute('data-tooltip-key');
-            if (langData[key]) element.setAttribute('data-tooltip', langData[key]);
+            const value = langData[element.getAttribute('data-tooltip-key')];
+            if (value != null) element.setAttribute('data-tooltip', value);
         });
-
-        const scrollHintEl = document.querySelector('.scroll-indicator [data-key="scrollHint"]');
-        if (scrollHintEl && langData.scrollHint) scrollHintEl.textContent = langData.scrollHint;
     }
 
     getCurrentLanguage() { return this.currentLang; }
-
-    getCurrentLanguageData() {
-        return translations ? translations[this.currentLang] : null;
-    }
+    getCurrentLanguageData() { return typeof translations !== 'undefined' ? translations[this.currentLang] : null; }
 
     getText(key, fallback = '') {
-        const langData = this.getCurrentLanguageData();
-        return langData && langData[key] ? langData[key] : fallback;
+        return this.getCurrentLanguageData()?.[key] ?? fallback;
     }
 
     getPlatformName(platformKey) {
-        const langData = this.getCurrentLanguageData();
-        return langData && langData.platforms && langData.platforms[platformKey]
-            ? langData.platforms[platformKey]
-            : platformKey;
+        return this.getCurrentLanguageData()?.platforms?.[platformKey] ?? platformKey;
     }
 
     saveLanguagePreference(lang) {
-        try {
-            localStorage.setItem('preferred_language', lang);
-        } catch (e) {
-            console.warn('Could not save language preference:', e);
-        }
+        try { localStorage.setItem('preferred_language', lang); }
+        catch (error) { console.warn('Could not save language preference:', error); }
     }
 
     loadLanguagePreference() {
         try {
             const saved = localStorage.getItem('preferred_language');
-            if (saved && this.supportedLangs.includes(saved)) return saved;
-        } catch (e) {
-            console.warn('Could not load language preference:', e);
+            return saved && this.supportedLangs.includes(saved) ? saved : null;
+        } catch (error) {
+            console.warn('Could not load language preference:', error);
+            return null;
         }
-        return null;
     }
 
-    isRTL(lang = null) {
-        const checkLang = lang || this.currentLang;
-        return checkLang === 'ar';
-    }
-
+    isRTL(lang = this.currentLang) { return lang === 'ar'; }
     addObserver(callback) { this.observers.push(callback); }
-
-    removeObserver(callback) {
-        this.observers = this.observers.filter(obs => obs !== callback);
-    }
+    removeObserver(callback) { this.observers = this.observers.filter(observer => observer !== callback); }
 
     notifyObservers(event, data) {
         this.observers.forEach(callback => {
-            try {
-                callback(event, data);
-            } catch (e) {
-                console.error('Observer callback error:', e);
-            }
+            try { callback(event, data); }
+            catch (error) { console.error('Observer callback error:', error); }
         });
     }
 
+    locale() {
+        return this.currentLang === 'ar' ? 'ar-EG' : this.currentLang === 'fr' ? 'fr-FR' : this.currentLang === 'tr' ? 'tr-TR' : 'en-US';
+    }
+
     formatNumber(number) {
-        try {
-            const locale = this.currentLang === 'ar' ? 'ar-EG' :
-                          this.currentLang === 'fr' ? 'fr-FR' :
-                          this.currentLang === 'tr' ? 'tr-TR' : 'en-US';
-            return new Intl.NumberFormat(locale).format(number);
-        } catch (e) {
-            return number.toString();
-        }
+        try { return new Intl.NumberFormat(this.locale()).format(number); }
+        catch (_) { return String(number); }
     }
 
     formatDate(date, options = {}) {
         try {
-            const locale = this.currentLang === 'ar' ? 'ar-EG' :
-                          this.currentLang === 'fr' ? 'fr-FR' :
-                          this.currentLang === 'tr' ? 'tr-TR' : 'en-US';
-            const defaultOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-            return new Intl.DateTimeFormat(locale, { ...defaultOptions, ...options }).format(date);
-        } catch (e) {
+            return new Intl.DateTimeFormat(this.locale(), { year: 'numeric', month: 'long', day: 'numeric', ...options }).format(date);
+        } catch (_) {
             return date.toLocaleDateString();
         }
     }
@@ -224,6 +189,4 @@ class LanguageManager {
 
 const languageManager = new LanguageManager();
 
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = LanguageManager;
-}
+if (typeof module !== 'undefined' && module.exports) module.exports = LanguageManager;

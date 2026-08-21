@@ -1,6 +1,7 @@
 /**
- * Professional directory behavior.
- * Extends the existing UIManager without breaking the original app bootstrap.
+ * Directory UI behavior layered on top of the legacy app.
+ * Keeps the data model backwards compatible while providing modern filtering,
+ * brand marks and clearer resource metadata.
  */
 (() => {
     const difficultyDefaults = {
@@ -11,6 +12,44 @@
         slack: 'medium', zoom: 'easy', dropbox: 'easy', adobe: 'medium', yahoo: 'medium', protonmail: 'easy'
     };
 
+    const escapeHtml = value => String(value ?? '').replace(/[&<>'"]/g, char => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+    })[char]);
+
+    const titleFor = (resource, lang) => resource?.title?.[lang] || resource?.title?.en || resource?.title?.ar || resource?.url || '';
+    const platformNameFor = (platform, langData) => platform.displayName || langData?.platforms?.[platform.name] || platform.name;
+
+    function readableIconColor(color) {
+        const value = String(color || '').replace('#', '');
+        if (!/^[0-9a-f]{6}$/i.test(value)) return 'dbe4ee';
+        const r = parseInt(value.slice(0, 2), 16);
+        const g = parseInt(value.slice(2, 4), 16);
+        const b = parseInt(value.slice(4, 6), 16);
+        const luminance = (0.299 * r + 0.587 * g + 0.114 * b);
+        return luminance < 62 ? 'dbe4ee' : value;
+    }
+
+    function brandMarkup(platform, displayName) {
+        const meta = typeof getBrandIconMeta === 'function'
+            ? getBrandIconMeta(platform, displayName)
+            : { slug: null, fallback: displayName.slice(0, 2).toUpperCase() };
+        const fallback = `<span class="brand-fallback" aria-hidden="true">${escapeHtml(meta.fallback)}</span>`;
+        if (!meta.slug) return `<span class="brand-mark-wrap fallback-only">${fallback}</span>`;
+
+        const color = readableIconColor(platform.color);
+        const src = `https://cdn.simpleicons.org/${encodeURIComponent(meta.slug)}/${color}?viewbox=auto`;
+        return `<span class="brand-mark-wrap">
+            <img class="brand-logo" src="${src}" width="30" height="30" loading="lazy" decoding="async" fetchpriority="low" alt="" aria-hidden="true">
+            ${fallback}
+        </span>`;
+    }
+
+    function bindBrandFallbacks(scope) {
+        scope.querySelectorAll('.brand-logo').forEach(image => {
+            image.addEventListener('error', () => image.closest('.brand-mark-wrap')?.classList.add('brand-failed'), { once: true });
+        });
+    }
+
     platforms.forEach(platform => {
         platform.difficulty = platform.difficulty || difficultyDefaults[platform.id] || 'medium';
         platform.loginRequired = platform.loginRequired !== false;
@@ -18,9 +57,6 @@
         platform.searchText = [platform.id, platform.name, platform.displayName, platform.category]
             .filter(Boolean).join(' ').toLowerCase();
     });
-
-    const titleFor = (resource, lang) => resource?.title?.[lang] || resource?.title?.en || resource?.title?.ar || resource?.url || '';
-    const platformNameFor = (platform, langData) => platform.displayName || langData?.platforms?.[platform.name] || platform.name;
 
     UIManager.prototype.setupProControls = function () {
         this.proFilters = this.proFilters || { query: '', category: 'all', difficulty: 'all' };
@@ -35,21 +71,15 @@
         });
 
         const difficulty = document.getElementById('difficultyFilter');
-        if (difficulty) {
-            difficulty.addEventListener('change', () => {
-                this.proFilters.difficulty = difficulty.value;
-                this.applyProFilters();
-            });
-        }
+        difficulty?.addEventListener('change', () => {
+            this.proFilters.difficulty = difficulty.value;
+            this.applyProFilters();
+        });
 
-        const aiButton = document.getElementById('showAiOnly');
-        if (aiButton) {
-            aiButton.addEventListener('click', () => {
-                const target = document.querySelector('[data-category-filter="ai"]');
-                if (target) target.click();
-                document.getElementById('directory')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            });
-        }
+        document.getElementById('showAiOnly')?.addEventListener('click', () => {
+            document.querySelector('[data-category-filter="ai"]')?.click();
+            document.getElementById('directory')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
 
         this.applyProFilters();
     };
@@ -69,29 +99,25 @@
             const localizedName = platformNameFor(platform, langData).toLowerCase();
             const localizedCategory = (categories[platform.category]?.[lang] || platform.category || '').toLowerCase();
             const resourceText = (platform.resources || []).map(resource => titleFor(resource, lang)).join(' ').toLowerCase();
-            const matchesQuery = !state.query || [platform.searchText, localizedName, localizedCategory, resourceText].join(' ').includes(state.query);
-            const matchesCategory = state.category === 'all' || platform.category === state.category;
-            const matchesDifficulty = state.difficulty === 'all' || platform.difficulty === state.difficulty;
-            return matchesQuery && matchesCategory && matchesDifficulty;
+            const haystack = [platform.searchText, localizedName, localizedCategory, resourceText].join(' ');
+            return (!state.query || haystack.includes(state.query)) &&
+                (state.category === 'all' || platform.category === state.category) &&
+                (state.difficulty === 'all' || platform.difficulty === state.difficulty);
         });
 
         this.renderPlatforms();
         this.updateStats();
         this.updateResultSummary();
-
-        if (this.filteredPlatforms.length === 0) this.showNoResults();
-        else this.hideNoResults();
+        this.filteredPlatforms.length ? this.hideNoResults() : this.showNoResults();
     };
 
     UIManager.prototype.updateResultSummary = function () {
+        const resources = this.filteredPlatforms.flatMap(platform => platform.resources || []);
+        const official = resources.filter(resource => resource.official !== false).length;
         const resultCount = document.getElementById('resultCount');
         const verifiedCount = document.getElementById('verifiedCount');
         if (resultCount) resultCount.textContent = `${this.filteredPlatforms.length} services`;
-        if (verifiedCount) {
-            const resources = this.filteredPlatforms.flatMap(platform => platform.resources || []);
-            const verified = resources.filter(resource => resource.official !== false).length;
-            verifiedCount.textContent = `${verified} official links`;
-        }
+        if (verifiedCount) verifiedCount.textContent = `${official} official links`;
     };
 
     UIManager.prototype.renderPlatforms = function () {
@@ -102,35 +128,33 @@
 
         grid.innerHTML = this.filteredPlatforms.map(platform => {
             const resourceCount = (platform.resources || []).length;
-            const isSelected = this.selectedPlatforms.includes(platform.id);
-            const categoryLabel = categories[platform.category]?.[lang] || platform.category;
+            const officialCount = (platform.resources || []).filter(resource => resource.official !== false).length;
+            const selected = this.selectedPlatforms.includes(platform.id);
             const name = platformNameFor(platform, langData);
-            const verifiedResources = (platform.resources || []).filter(resource => resource.official !== false).length;
-            const isAI = platform.category === 'ai';
-            const glow = `${platform.color || '#8b5cf6'}24`;
+            const category = categories[platform.category]?.[lang] || platform.category;
 
-            return `
-                <button class="platform-card ${isSelected ? 'active' : ''}" data-id="${platform.id}" type="button"
-                    onclick="uiManager.selectPlatform('${platform.id}')" style="--platform-glow:${glow}"
-                    aria-pressed="${isSelected}" aria-label="${name}, ${resourceCount} resources">
-                    <div class="platform-head">
-                        <div class="platform-icon" style="color:${platform.color || '#c4b5fd'}"><i class="${platform.icon || 'fas fa-link'}"></i></div>
-                        <div class="platform-badge"><i class="fas fa-link"></i> ${resourceCount}</div>
-                    </div>
-                    <h3 class="platform-name">${name}</h3>
-                    <div class="platform-category">${categoryLabel}</div>
-                    <div class="platform-meta">
-                        <span class="meta-badge verified"><i class="fas fa-circle-check"></i> ${verifiedResources}/${resourceCount} official</span>
-                        <span class="meta-badge difficulty-${platform.difficulty}">${platform.difficulty}</span>
-                        ${isAI ? '<span class="meta-badge ai"><i class="fas fa-wand-magic-sparkles"></i> AI</span>' : ''}
-                    </div>
-                </button>`;
+            return `<button class="platform-card ${selected ? 'active' : ''}" data-id="${escapeHtml(platform.id)}" type="button"
+                onclick="uiManager.selectPlatform('${escapeHtml(platform.id)}')" aria-pressed="${selected}" aria-label="${escapeHtml(name)}, ${resourceCount} resources">
+                <div class="platform-card-top">
+                    ${brandMarkup(platform, name)}
+                    <span class="resource-total">${resourceCount}</span>
+                </div>
+                <h3 class="platform-name">${escapeHtml(name)}</h3>
+                <p class="platform-category">${escapeHtml(category)}</p>
+                <div class="platform-meta">
+                    <span class="verified-dot"><i class="fas fa-circle-check" aria-hidden="true"></i> ${officialCount} official</span>
+                    <span class="difficulty difficulty-${escapeHtml(platform.difficulty)}">${escapeHtml(platform.difficulty)}</span>
+                    ${platform.category === 'ai' ? '<span class="category-tag">AI</span>' : ''}
+                </div>
+            </button>`;
         }).join('');
+
+        bindBrandFallbacks(grid);
     };
 
     UIManager.prototype.selectPlatform = function (platformId) {
-        const isSelected = this.selectedPlatforms.includes(platformId);
-        this.selectedPlatforms = isSelected
+        const wasSelected = this.selectedPlatforms.includes(platformId);
+        this.selectedPlatforms = wasSelected
             ? this.selectedPlatforms.filter(id => id !== platformId)
             : [...this.selectedPlatforms, platformId];
 
@@ -139,11 +163,8 @@
         this.updateResourcesSection();
         this.updateStats();
 
-        if (!isSelected) {
-            const section = document.getElementById('resourcesSection');
-            if (section && this.selectedPlatforms.length === 1) {
-                setTimeout(() => section.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
-            }
+        if (!wasSelected && this.selectedPlatforms.length === 1) {
+            setTimeout(() => document.getElementById('resourcesSection')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
         }
     };
 
@@ -155,11 +176,7 @@
         const lang = languageManager.getCurrentLanguage();
         const langData = languageManager.getCurrentLanguageData();
         const selected = platforms.filter(platform => this.selectedPlatforms.includes(platform.id));
-        const resources = [];
-
-        selected.forEach(platform => {
-            (platform.resources || []).forEach(resource => resources.push({ ...resource, platform }));
-        });
+        const resources = selected.flatMap(platform => (platform.resources || []).map(resource => ({ ...resource, platform })));
 
         if (!resources.length) {
             this.hideResourcesSection();
@@ -167,41 +184,40 @@
         }
 
         const groups = this.groupResourcesByType(resources);
-        grid.innerHTML = `
-            <div class="selected-summary">
-                <strong>${selected.length} selected service${selected.length === 1 ? '' : 's'}</strong>
-                <span>${resources.length} verified actions and settings</span>
-            </div>
-            ${Object.entries(groups).map(([type, items]) => {
-                const info = resourceTypes[type] || resourceTypes.settings;
-                return `
-                    <div class="resource-type-section">
-                        <h4 class="resource-type-title" style="color:${info.color}"><i class="${info.icon}"></i> ${info[lang] || info.en || type}</h4>
-                        <div class="resource-cards">
-                            ${items.map(resource => {
-                                const platform = resource.platform;
-                                const platformName = platformNameFor(platform, langData);
-                                const scopeWarning = resource.destructiveScope
-                                    ? `<span class="scope-warning"><i class="fas fa-triangle-exclamation"></i> Deletes entire ${resource.destructiveScope.replace('-', ' ')}</span>` : '';
-                                return `
-                                    <article class="resource-card">
-                                        <a href="${resource.url}" target="_blank" rel="noopener noreferrer" class="resource-link">
-                                            <h5 class="resource-title"><i class="${info.icon}" style="color:${info.color}"></i> ${titleFor(resource, lang)}</h5>
-                                            <p class="resource-description"><i class="fas fa-arrow-up-right-from-square"></i> ${platformName}</p>
-                                            <div class="resource-meta">
-                                                ${resource.official !== false ? '<span class="official"><i class="fas fa-circle-check"></i> Official</span>' : ''}
-                                                ${resource.verified ? `<span><i class="fas fa-calendar-check"></i> ${resource.verified}</span>` : ''}
-                                                ${platform.loginRequired ? '<span><i class="fas fa-lock"></i> Sign-in may be required</span>' : ''}
-                                                ${scopeWarning}
-                                            </div>
-                                            ${platform.note ? `<p class="resource-note">${platform.note}</p>` : ''}
-                                        </a>
-                                    </article>`;
-                            }).join('')}
-                        </div>
-                    </div>`;
-            }).join('')}`;
+        grid.innerHTML = `<div class="selected-summary">
+            <div><strong>${selected.length} selected</strong><span>${resources.length} actions</span></div>
+            <button type="button" onclick="uiManager.resetSelection()">Clear selection</button>
+        </div>
+        ${Object.entries(groups).map(([type, items]) => {
+            const info = resourceTypes[type] || resourceTypes.settings;
+            return `<section class="resource-type-section">
+                <h4 class="resource-type-title"><i class="${info.icon}" aria-hidden="true"></i>${escapeHtml(info[lang] || info.en || type)}</h4>
+                <div class="resource-cards">
+                    ${items.map(resource => {
+                        const platform = resource.platform;
+                        const platformName = platformNameFor(platform, langData);
+                        const warning = resource.destructiveScope
+                            ? `<span class="scope-warning"><i class="fas fa-triangle-exclamation" aria-hidden="true"></i> Entire ${escapeHtml(resource.destructiveScope.replace('-', ' '))}</span>` : '';
+                        return `<article class="resource-card">
+                            <a href="${escapeHtml(resource.url)}" target="_blank" rel="noopener noreferrer" class="resource-link">
+                                <div class="resource-service">${brandMarkup(platform, platformName)}<span>${escapeHtml(platformName)}</span></div>
+                                <h5 class="resource-title">${escapeHtml(titleFor(resource, lang))}</h5>
+                                <div class="resource-meta">
+                                    ${resource.official !== false ? '<span class="official"><i class="fas fa-circle-check" aria-hidden="true"></i> Official</span>' : ''}
+                                    ${resource.verified ? `<span>Checked ${escapeHtml(resource.verified)}</span>` : ''}
+                                    ${platform.loginRequired ? '<span><i class="fas fa-lock" aria-hidden="true"></i> Sign-in</span>' : ''}
+                                    ${warning}
+                                </div>
+                                ${platform.note ? `<p class="resource-note">${escapeHtml(platform.note)}</p>` : ''}
+                                <span class="open-resource">Open official page <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i></span>
+                            </a>
+                        </article>`;
+                    }).join('')}
+                </div>
+            </section>`;
+        }).join('')}`;
 
+        bindBrandFallbacks(grid);
         section.classList.add('show');
     };
 
@@ -218,7 +234,5 @@
         this.applyProFilters();
     };
 
-    document.addEventListener('DOMContentLoaded', () => {
-        uiManager.setupProControls?.();
-    });
+    document.addEventListener('DOMContentLoaded', () => uiManager.setupProControls?.());
 })();

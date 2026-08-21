@@ -14,6 +14,7 @@ class LanguageManager {
         this.detectBrowserLanguage();
         this.setupEventListeners();
         this.updateHTMLAttributes();
+        this.ensureAccessibleLabels();
     }
 
     detectBrowserLanguage() {
@@ -51,6 +52,11 @@ class LanguageManager {
                 if (wasOpen) languageBtn?.focus();
             }
         });
+    }
+
+    ensureAccessibleLabels() {
+        const githubLink = document.querySelector('.nav-github');
+        if (githubLink) githubLink.setAttribute('aria-label', 'GitHub repository');
     }
 
     toggleLanguageDropdown() {
@@ -99,6 +105,7 @@ class LanguageManager {
         });
 
         this.updateAllTextElements();
+        this.ensureAccessibleLabels();
         const langData = this.getCurrentLanguageData();
         if (langData?.title) document.title = langData.title;
         const metaDesc = document.querySelector('meta[name="description"]');

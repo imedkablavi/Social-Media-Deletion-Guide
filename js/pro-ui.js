@@ -218,15 +218,6 @@
         this.applyProFilters();
     };
 
-    const originalLanguageUpdate = App.prototype.updateLanguageDependentComponents;
-    App.prototype.updateLanguageDependentComponents = function () {
-        if (originalLanguageUpdate) originalLanguageUpdate.call(this);
-        if (this.components.uiManager) {
-            this.components.uiManager.applyProFilters?.();
-            this.components.uiManager.updateResourcesSection?.();
-        }
-    };
-
     document.addEventListener('DOMContentLoaded', () => {
         uiManager.setupProControls?.();
     });

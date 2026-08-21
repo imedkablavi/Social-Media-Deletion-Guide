@@ -1,0 +1,50 @@
+name: Check external links
+
+on:
+  pull_request:
+  push:
+    branches: ["main"]
+  schedule:
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: link-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  links:
+    name: Validate directory links
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check links with Lychee
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --verbose
+            --no-progress
+            --max-retries 2
+            --timeout 20
+            --accept 200,204,206,301,302,303,307,308,401,403,405,429
+            --exclude '^https://accounts\.snapchat\.com/'
+            --exclude '^https://my\.telegram\.org/'
+            --exclude '^https://discord\.com/settings/'
+            --exclude '^https://x\.com/settings/'
+            --exclude '^https://www\.instagram\.com/accounts/remove/'
+            --exclude '^https://accountscenter\.instagram\.com/'
+            --exclude '^https://www\.netflix\.com/account'
+            --exclude '^https://www\.paypal\.com/myaccount/'
+            --exclude '^https://myaccount\.ea\.com/'
+            --exclude '^https://account\.battle\.net/'
+            --exclude '^https://id\.atlassian\.com/'
+            --exclude '^https://www\.figma\.com/settings'
+            --exclude '^https://myprivacy\.uber\.com/'
+            README.md index.html js/*.js
+          fail: true
+          jobSummary: true

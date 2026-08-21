@@ -17,11 +17,14 @@ concurrency:
 
 jobs:
   links:
-    name: Validate directory links
+    name: Validate effective directory links
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Build effective URL list
+        run: node scripts/export-effective-urls.js > effective-urls.txt
 
       - name: Check links with Lychee
         uses: lycheeverse/lychee-action@v2
@@ -32,8 +35,8 @@ jobs:
             --max-retries 2
             --timeout 20
             --accept 200,204,206,301,302,303,307,308,401,403,405,429
-            --exclude '^https://cdn\.simpleicons\.org/'
             --exclude '^https://accounts\.snapchat\.com/'
+            --exclude '^https://accounts\.nintendo\.com/'
             --exclude '^https://my\.telegram\.org/'
             --exclude '^https://discord\.com/settings/'
             --exclude '^https://x\.com/settings/'
@@ -46,6 +49,6 @@ jobs:
             --exclude '^https://id\.atlassian\.com/'
             --exclude '^https://www\.figma\.com/settings'
             --exclude '^https://myprivacy\.uber\.com/'
-            README.md index.html js/*.js
+            effective-urls.txt README.md index.html
           fail: true
           jobSummary: true

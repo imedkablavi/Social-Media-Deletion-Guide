@@ -2,76 +2,81 @@
 
 # Account Deletion & Privacy Guide
 
-**Find the official place to delete an account, export your data, secure access, or review privacy settings.**
+**A maintained, multilingual directory for official account deletion, AI activity deletion, data export, privacy, and security controls.**
 
-[![Platforms](https://img.shields.io/badge/platforms-50%2B-6366f1)](#platform-coverage)
+[![Platforms](https://img.shields.io/badge/services-60%2B-7c3aed)](#coverage)
+[![AI services](https://img.shields.io/badge/AI%20services-9-0891b2)](#ai-privacy-directory)
 [![Languages](https://img.shields.io/badge/languages-AR%20%7C%20EN%20%7C%20FR%20%7C%20TR-10b981)](#languages)
+[![Quality](https://img.shields.io/github/actions/workflow/status/imedkablavi/Social-Media-Deletion-Guide/quality.yml?label=quality)](https://github.com/imedkablavi/Social-Media-Deletion-Guide/actions/workflows/quality.yml)
 [![Link checks](https://img.shields.io/github/actions/workflow/status/imedkablavi/Social-Media-Deletion-Guide/link-check.yml?label=link%20checks)](https://github.com/imedkablavi/Social-Media-Deletion-Guide/actions/workflows/link-check.yml)
+[![Pages](https://img.shields.io/github/actions/workflow/status/imedkablavi/Social-Media-Deletion-Guide/static.yml?label=pages)](https://github.com/imedkablavi/Social-Media-Deletion-Guide/actions/workflows/static.yml)
 [![License](https://img.shields.io/badge/license-MIT-0f172a)](LICENSE)
 
-[Live Guide](https://imedkablavi.github.io/Social-Media-Deletion-Guide/) · [Report a broken link](https://github.com/imedkablavi/Social-Media-Deletion-Guide/issues/new?template=broken-link.yml)
+[**Live Guide**](https://imedkablavi.github.io/Social-Media-Deletion-Guide/) · [Report a broken link](https://github.com/imedkablavi/Social-Media-Deletion-Guide/issues/new?template=broken-link.yml) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md)
 
 </div>
 
 ---
 
-## What this project is
+## Why this exists
 
-Account deletion pages are often buried behind settings screens, help-center articles, regional redirects, or login walls. This project keeps those destinations in one searchable directory and separates different actions instead of treating everything as "delete account".
+Deleting an online account is often harder than creating one. Providers may hide deletion behind account settings, subscription cancellation, privacy portals, mobile-only flows, or support articles. AI products make this even more confusing because **deleting an AI conversation, deleting AI activity, and deleting the parent Google/Microsoft account are different actions**.
 
-Resources are grouped by purpose:
+This project makes those distinctions explicit and routes users to first-party destinations whenever possible.
 
-- **Delete** — permanent account deletion or the provider's official deletion process
-- **Disable** — deactivation, cancellation, or temporary closure when it is different from deletion
-- **Backup** — data export, archive, portability, or account-data requests
-- **Security** — recovery, compromised-account help, passwords, sessions, and authentication
-- **Settings / Manage** — official account and privacy controls
+## What makes this directory different
 
-The guide prefers first-party provider pages. Some actions only become visible after signing in, and some services use different flows by country or account type.
+- **Official-first data model** — provider-owned help centers, privacy portals, and authenticated settings are preferred.
+- **Deletion difficulty** — `easy`, `medium`, and `hard` signals inspired by established account-deletion directories, presented as usability metadata rather than a blacklist.
+- **AI-aware privacy actions** — account deletion is separated from AI/chat/activity deletion.
+- **Verified metadata** — maintained resources carry an `official` flag and review date.
+- **Category and difficulty filters** — users can quickly narrow the directory instead of scanning a giant card wall.
+- **Search across names, categories, and resource titles**.
+- **Scope warnings** — destructive links can warn when an action affects an entire Google or Microsoft account.
+- **Four UI languages** — English, Arabic, French, and Turkish with RTL support for Arabic.
+- **Automated quality checks** — HTML structure, local assets, catalog sanity, and JavaScript syntax are validated in CI.
+- **Scheduled external-link monitoring** — broken provider URLs are detected before the directory quietly rots.
+- **Static deployment** — no database, backend, or credential collection.
 
-## Highlights
+## AI privacy directory
 
-- 50+ platforms and online services
-- Arabic, English, French, and Turkish UI
-- RTL layout for Arabic
-- Searchable platform directory
-- Resource grouping by action type
-- Official-source and maintenance metadata in the catalog
-- Dynamic platform/resource counters instead of hard-coded totals
-- Weekly automated external-link checks with GitHub Actions
-- Dedicated broken-link issue form
-- Static deployment with GitHub Pages
-- No build step or backend required
+The AI catalog currently includes dedicated entries for:
 
-## Platform coverage
+| Service | Account deletion | AI/history controls | Data/privacy controls |
+| --- | --- | --- | --- |
+| OpenAI / ChatGPT | Yes | Data controls | Privacy Portal |
+| Claude | Yes | Account settings | Provider help |
+| Google Gemini | Via Google Account | Gemini Apps Activity | Google Takeout / privacy |
+| Perplexity | Yes | Sessions/history deletion | Account export/privacy |
+| Microsoft Copilot | Via Microsoft Account | Copilot activity history | Microsoft privacy dashboard |
+| Mistral AI | Yes | Data-governance controls | Privacy/data governance |
+| Character.AI | Yes | Account/data settings | Provider help |
+| ElevenLabs | Yes | Settings | Provider help |
+| Poe | Yes | Chat/history deletion | Account settings |
 
-The directory covers a mix of social networks, messaging apps, developer services, gaming accounts, productivity products, streaming services, marketplaces, and privacy tools.
+The important design rule is that the UI does **not** pretend every AI product owns a standalone identity system. Gemini and Copilot, for example, can expose history deletion independently from deleting the parent account.
 
-Examples include X, Instagram, Facebook, Threads, Bluesky, Mastodon, Tumblr, TikTok, Snapchat, Reddit, LinkedIn, Pinterest, WhatsApp, Telegram, Signal, Discord, Viber, LINE, Google, Microsoft, Apple, GitHub, GitLab, Atlassian, Figma, OpenAI, Dropbox, Notion, Adobe, Amazon, eBay, PayPal, Netflix, Spotify, Twitch, Steam, Epic Games, PlayStation, Nintendo, Roblox, EA, Ubisoft, Riot Games, Battle.net, Airbnb, Uber, Yahoo, Proton, and more.
+## Coverage
 
-The source of truth is the JavaScript catalog rather than this README, so the live count can grow without requiring a manual badge update every time.
+The broader directory covers social media, messaging, developer tools, productivity services, streaming, gaming, marketplaces, cloud services, email providers, and privacy/security utilities.
 
-## Link maintenance
+Examples include X, Instagram, Facebook, Threads, Bluesky, Mastodon, Tumblr, TikTok, Snapchat, Reddit, LinkedIn, Pinterest, WhatsApp, Telegram, Signal, Discord, Viber, LINE, Google, Microsoft, Apple, GitHub, GitLab, Atlassian, Figma, Dropbox, Notion, Adobe, Amazon, eBay, PayPal, Netflix, Spotify, Twitch, Steam, Epic Games, PlayStation, Nintendo, Roblox, EA, Ubisoft, Riot Games, Battle.net, Airbnb, Uber, Yahoo, Proton, OpenAI, Claude, Gemini, Perplexity, Copilot, Mistral, Character.AI, ElevenLabs, Poe, and more.
 
-A directory like this becomes unreliable if links are only checked manually. The repository includes a scheduled link-check workflow:
+The live JavaScript catalog is the source of truth, so the exact count can grow without manually rewriting this section.
 
-```text
-.github/workflows/link-check.yml
-```
+## Resource types
 
-It runs on pull requests, pushes to `main`, manual dispatch, and every Monday. Authentication-only URLs that reject automated clients are explicitly excluded from HTTP validation and remain reviewable through the issue system.
+The project avoids collapsing unrelated actions into one generic "delete" button.
 
-If a provider changes a deletion flow, open the **Broken or outdated link** issue form and include the new official URL when available.
-
-## Languages
-
-Supported UI languages:
-
-```text
-Arabic / English / French / Turkish
-```
-
-The legacy dataset remains compatible with the original translation files. `js/translations-updates.js` adds maintained copy and names for newer platforms, while `js/catalog-updates.js` fills missing Turkish resource labels so older entries do not render as `undefined`.
+- `delete` — permanent account deletion
+- `disable` — reversible deactivation or subscription cancellation
+- `activity` — AI/chat/activity-history deletion
+- `backup` — data export and portability
+- `privacy` — privacy portal or data controls
+- `security` — account recovery, sessions, authentication
+- `settings` — general account settings
+- `manage` — other account-management actions
+- `guide` / `tools` — reference or privacy/security utilities
 
 ## Project structure
 
@@ -81,56 +86,92 @@ The legacy dataset remains compatible with the original translation files. `js/t
 │   ├── ISSUE_TEMPLATE/
 │   │   └── broken-link.yml
 │   └── workflows/
-│       ├── link-check.yml
-│       └── static.yml
+│       ├── link-check.yml       # scheduled external-link monitoring
+│       ├── quality.yml          # static validation + JS syntax checks
+│       └── static.yml           # GitHub Pages deployment
 ├── css/
-│   └── components.css
+│   ├── components.css           # original visual foundation
+│   └── professional.css         # professional directory design layer
 ├── js/
 │   ├── translations.js
 │   ├── translations-updates.js
-│   ├── platforms.js
-│   ├── catalog-updates.js
+│   ├── platforms.js             # legacy/base catalog
+│   ├── catalog-updates.js       # maintained corrections/additions
+│   ├── ai-catalog.js            # dedicated AI privacy/account catalog
 │   ├── language-manager.js
 │   ├── ui-manager.js
+│   ├── pro-ui.js                # filtering, metadata, resource UI
 │   └── app.js
+├── scripts/
+│   └── validate.py
+├── CONTRIBUTING.md
+├── SECURITY.md
 ├── index.html
 └── README.md
 ```
 
-### Where to edit things
+## Data model
 
-- Add a new maintained platform in `js/catalog-updates.js`
-- Update older catalog entries in `js/platforms.js` only when a full cleanup is intended
-- Add platform names or copy in `js/translations-updates.js`
-- Change layout and animations in `css/components.css`
-- Change rendering behavior in `js/ui-manager.js`
-
-## Adding a platform
-
-Prefer an official provider URL. A deletion entry should not point to a generic homepage when a specific help article or account setting exists.
-
-A maintained resource can include verification metadata:
+A maintained platform can carry UI and maintenance metadata:
 
 ```js
 {
-  url: "https://provider.example/help/delete-account",
-  title: {
-    ar: "حذف الحساب",
-    en: "Delete account",
-    fr: "Supprimer le compte",
-    tr: "Hesabı sil"
-  },
-  type: "delete",
-  official: true,
-  verified: "2026-08-21"
+  id: 'service-id',
+  name: 'service-id',
+  displayName: 'Service Name',
+  category: 'ai',
+  difficulty: 'easy',
+  loginRequired: true,
+  note: 'Short factual caveat.',
+  resources: [
+    {
+      url: 'https://provider.example/account/delete',
+      title: { en: 'Delete account', ar: '...', fr: '...', tr: '...' },
+      type: 'delete',
+      official: true,
+      verified: '2026-08-21'
+    }
+  ]
 }
 ```
 
-Useful resource types are `delete`, `disable`, `backup`, `security`, `settings`, `manage`, `guide`, and `tools`.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for source-quality rules and contribution requirements.
+
+## Quality and maintenance
+
+Three GitHub Actions workflows protect the project:
+
+### Quality checks
+
+`.github/workflows/quality.yml`
+
+- validates duplicate HTML IDs
+- checks required SEO metadata
+- verifies referenced local assets exist
+- detects placeholder/insecure catalog URLs
+- checks all JavaScript files with `node --check`
+
+### External link checks
+
+`.github/workflows/link-check.yml`
+
+- runs on pull requests and pushes to `main`
+- runs on a schedule
+- checks external destinations with Lychee
+- excludes known authenticated pages that intentionally reject automated clients
+
+### Static deployment
+
+`.github/workflows/static.yml`
+
+- checks out `main`
+- configures GitHub Pages
+- uploads the static repository artifact
+- deploys the site through `actions/deploy-pages`
 
 ## Local development
 
-No package manager is required.
+No package manager or build tool is required.
 
 ```bash
 git clone https://github.com/imedkablavi/Social-Media-Deletion-Guide.git
@@ -138,36 +179,36 @@ cd Social-Media-Deletion-Guide
 python -m http.server 8000
 ```
 
-Then open `http://127.0.0.1:8000/`.
-
-Opening `index.html` directly also works in modern browsers, but a local HTTP server is preferable when testing behavior consistently.
-
-## Deployment
-
-The repository deploys the static site to GitHub Pages through `.github/workflows/static.yml`.
-
-The canonical production URL is:
+Open:
 
 ```text
-https://imedkablavi.github.io/Social-Media-Deletion-Guide/
+http://127.0.0.1:8000/
 ```
 
-## Contributing
+Run validation:
 
-Useful contributions include:
+```bash
+python scripts/validate.py
+for file in js/*.js; do node --check "$file"; done
+```
 
-- replacing an outdated provider URL with the current official one
-- adding a missing platform with first-party deletion/privacy documentation
-- documenting account-vs-subscription differences
-- improving Arabic, English, French, or Turkish wording
-- reporting region-specific behavior
-- accessibility and keyboard-navigation fixes
+## Languages
 
-When changing a link, prefer a provider help center, privacy portal, or authenticated account-settings destination over third-party deletion directories.
+```text
+English / Arabic / French / Turkish
+```
 
-## Important note
+English is the first-visit default. Arabic switches the document to RTL automatically.
 
-This project is a navigation directory, not a deletion service. It does not ask for account passwords, tokens, personal data, or provider credentials. Account deletion is performed on the provider's own website or application.
+## Privacy and security model
+
+This is a navigation directory, not an account-deletion proxy. It does **not** request or store passwords, authentication tokens, recovery codes, or account data. Users perform destructive actions on the provider's own domain.
+
+See [SECURITY.md](SECURITY.md) for the trust model and security-reporting guidance.
+
+## Inspiration
+
+The project borrows the useful concept of deletion difficulty from long-running account-deletion directories such as JustDeleteMe and AccountKiller, while using its own interface, catalog format, verification metadata, multilingual support, AI-specific privacy distinctions, and automated maintenance workflows.
 
 ## License
 

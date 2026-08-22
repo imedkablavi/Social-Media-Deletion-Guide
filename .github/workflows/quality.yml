@@ -30,6 +30,8 @@ jobs:
         run: node scripts/audit-localization.js
 
       - name: Build production site
+        env:
+          GOOGLE_SITE_VERIFICATION: ci-search-console-verification-token-20260822
         run: npm run build
 
       - name: Validate source, generated SEO pages and catalog
@@ -37,6 +39,11 @@ jobs:
 
       - name: Validate curated growth pages and topic hubs
         run: node scripts/validate-growth.js
+
+      - name: Validate Search Console indexing readiness
+        env:
+          GOOGLE_SITE_VERIFICATION: ci-search-console-verification-token-20260822
+        run: node scripts/validate-indexing.js
 
       - name: Build effective user-visible URL list
         run: |

@@ -12,12 +12,14 @@ const path = require('path');
 const { loadCatalog } = require('./load-catalog.js');
 const { GUIDE_CONTENT: GUIDE_CONTENT_BASE, TOPIC_PAGES: TOPIC_PAGES_BASE } = require('./growth-content.js');
 const { GUIDE_CONTENT_BATCH2, TOPIC_PAGES_BATCH2 } = require('./growth-batch-2.js');
-const GUIDE_CONTENT = { ...GUIDE_CONTENT_BASE, ...GUIDE_CONTENT_BATCH2 };
-const TOPIC_PAGES = { ...TOPIC_PAGES_BASE, ...TOPIC_PAGES_BATCH2 };
+const { GUIDE_CONTENT_BATCH3, TOPIC_PAGES_BATCH3 } = require('./growth-batch-3.js');
+const GUIDE_CONTENT = { ...GUIDE_CONTENT_BASE, ...GUIDE_CONTENT_BATCH2, ...GUIDE_CONTENT_BATCH3 };
+const TOPIC_PAGES = { ...TOPIC_PAGES_BASE, ...TOPIC_PAGES_BATCH2, ...TOPIC_PAGES_BATCH3 };
 
 const ROOT = path.resolve(__dirname, '..');
 const DIST = path.join(ROOT, 'dist');
 const BASE_URL = 'https://imedkablavi.github.io/Social-Media-Deletion-Guide/';
+const GOOGLE_SITE_VERIFICATION = String(process.env.GOOGLE_SITE_VERIFICATION || '').trim();
 const { platforms, categories, resourceTypes, translations } = loadCatalog();
 
 const LANGS = {
@@ -182,6 +184,7 @@ function commonHead({ lang, title, description, canonical, alternates, jsonLd })
     <title>${escapeHtml(title)}</title>
     <meta name="description" content="${escapeHtml(description)}">
     <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large">
+    ${GOOGLE_SITE_VERIFICATION ? `<meta name="google-site-verification" content="${escapeHtml(GOOGLE_SITE_VERIFICATION)}">` : ''}
     <link rel="canonical" href="${canonical}">
     ${alternates}
     <meta property="og:type" content="website">
@@ -348,6 +351,9 @@ function renderTopicIndex(lang) {
 
 function enrichHomepage() {
     let html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+    if (GOOGLE_SITE_VERIFICATION && !html.includes('name="google-site-verification"')) {
+        html = html.replace('</head>', `    <meta name="google-site-verification" content="${escapeHtml(GOOGLE_SITE_VERIFICATION)}">\n</head>`);
+    }
     const headMarker = '<!-- build:seo-head -->';
     if (!html.includes(headMarker)) {
         const extra = `${headMarker}\n    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">\n    <link rel="manifest" href="site.webmanifest">\n    <meta property="og:image" content="${BASE_URL}assets/social-preview.png">\n    <meta property="og:image:width" content="1200">\n    <meta property="og:image:height" content="630">\n    <meta name="twitter:image" content="${BASE_URL}assets/social-preview.png">`;

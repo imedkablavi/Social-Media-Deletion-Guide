@@ -3,10 +3,14 @@ const fs = require('fs');
 const path = require('path');
 const { GUIDE_CONTENT: GUIDE_CONTENT_BASE, TOPIC_PAGES: TOPIC_PAGES_BASE } = require('./growth-content.js');
 const { GUIDE_CONTENT_BATCH2, TOPIC_PAGES_BATCH2 } = require('./growth-batch-2.js');
-const GUIDE_CONTENT = { ...GUIDE_CONTENT_BASE, ...GUIDE_CONTENT_BATCH2 };
-const TOPIC_PAGES = { ...TOPIC_PAGES_BASE, ...TOPIC_PAGES_BATCH2 };
+const { GUIDE_CONTENT_BATCH3, TOPIC_PAGES_BATCH3 } = require('./growth-batch-3.js');
+const GUIDE_CONTENT = { ...GUIDE_CONTENT_BASE, ...GUIDE_CONTENT_BATCH2, ...GUIDE_CONTENT_BATCH3 };
+const TOPIC_PAGES = { ...TOPIC_PAGES_BASE, ...TOPIC_PAGES_BATCH2, ...TOPIC_PAGES_BATCH3 };
 const BATCH2_GUIDES = ['facebook', 'whatsapp', 'discord', 'telegram', 'microsoft', 'apple', 'snapchat', 'spotify', 'steam', 'amazon'];
 const BATCH2_TOPICS = ['delete-gaming-accounts', 'cancel-subscriptions-before-deleting', 'protect-cloud-data-before-deletion', 'account-deletion-grace-periods'];
+const BATCH3_GUIDES = ['twitter', 'linkedin', 'paypal', 'netflix', 'dropbox', 'adobe', 'slack', 'zoom', 'pinterest', 'ebay'];
+const BATCH3_TOPICS = ['deactivate-vs-delete-social-accounts', 'delete-work-and-cloud-accounts', 'delete-payment-and-marketplace-accounts', 'cancel-streaming-before-deleting'];
+const SEARCH_INTENTS = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'search-intents.json'), 'utf8'));
 
 const ROOT = path.resolve(__dirname, '..');
 const DIST = path.join(ROOT, 'dist');
@@ -25,12 +29,20 @@ function read(relative) {
 }
 
 const report = JSON.parse(read('build-report.json'));
-if (report.curatedGuides < 16) fail(`expected at least 16 curated guides, got ${report.curatedGuides}`);
+if (report.curatedGuides < 26) fail(`expected at least 26 curated guides, got ${report.curatedGuides}`);
 if (report.topicPages !== Object.keys(TOPIC_PAGES).length * LANGS.length) fail(`unexpected topic page count: ${report.topicPages}`);
 if (report.topicIndexes !== LANGS.length) fail(`unexpected topic index count: ${report.topicIndexes}`);
-if (report.sitemapUrls < 289) fail(`sitemap should contain batch 2 growth hubs; got only ${report.sitemapUrls} URLs`);
+if (report.sitemapUrls < 305) fail(`sitemap should contain batch 3 growth hubs; got only ${report.sitemapUrls} URLs`);
 for (const id of BATCH2_GUIDES) if (!GUIDE_CONTENT[id]) fail(`missing batch 2 guide: ${id}`);
 for (const slug of BATCH2_TOPICS) if (!TOPIC_PAGES[slug]) fail(`missing batch 2 topic: ${slug}`);
+for (const id of BATCH3_GUIDES) if (!GUIDE_CONTENT[id]) fail(`missing batch 3 guide: ${id}`);
+for (const slug of BATCH3_TOPICS) if (!TOPIC_PAGES[slug]) fail(`missing batch 3 topic: ${slug}`);
+if (!Array.isArray(SEARCH_INTENTS.targets) || SEARCH_INTENTS.targets.length !== BATCH3_GUIDES.length) fail('search-intents.json must describe every batch 3 service');
+const intentIds = new Set(SEARCH_INTENTS.targets.map(item => item.service));
+for (const id of BATCH3_GUIDES) if (!intentIds.has(id)) fail(`search-intents.json missing batch 3 service ${id}`);
+for (const item of SEARCH_INTENTS.targets) {
+  if (!item.query || !/^https:\/\//.test(item.officialSource || '')) fail(`invalid search intent record for ${item.service}`);
+}
 
 for (const [serviceId, guide] of Object.entries(GUIDE_CONTENT)) {
   if (!guide.reviewed) fail(`${serviceId} curated guide is missing reviewed date`);
@@ -89,5 +101,15 @@ if (trSpotify.includes('Delete Spotify only') || !trSpotify.includes('7 gün')) 
 const gamingEn = read('en/topics/delete-gaming-accounts/index.html');
 for (const id of ['steam', 'epicgames', 'playstation']) if (!gamingEn.includes(`/en/services/${id}/`)) fail(`gaming topic missing ${id}`);
 for (const id of ['google', 'microsoft', 'amazon']) if (gamingEn.includes(`/en/services/${id}/`)) fail(`gaming topic incorrectly includes ${id}`);
+const arX = read('ar/services/twitter/index.html');
+if (!arX.includes('30 يوماً') || arX.includes('Delete X (Twitter)')) fail('Arabic X curated content is missing or leaked English');
+const trAdobe = read('tr/services/adobe/index.html');
+if (!trAdobe.includes('27 gün') || trAdobe.includes('Delete Adobe Account')) fail('Turkish Adobe curated content is missing or leaked English');
+const frEbay = read('fr/services/ebay/index.html');
+if (!frEbay.includes('14 jours') || !frEbay.includes('60 jours')) fail('French eBay timing content is missing');
+const workHub = read('en/topics/delete-work-and-cloud-accounts/index.html');
+for (const id of ['linkedin', 'slack', 'zoom', 'adobe', 'dropbox', 'github', 'microsoft']) if (!workHub.includes(`/en/services/${id}/`)) fail(`work/cloud topic missing ${id}`);
+const paymentsHub = read('en/topics/delete-payment-and-marketplace-accounts/index.html');
+for (const id of ['paypal', 'ebay', 'amazon']) if (!paymentsHub.includes(`/en/services/${id}/`)) fail(`payments topic missing ${id}`);
 
 console.log(`Growth validation passed: ${report.curatedGuides} curated guides, ${report.topicPages} topic pages, ${report.sitemapUrls} sitemap URLs.`);

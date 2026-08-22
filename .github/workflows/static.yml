@@ -30,6 +30,8 @@ jobs:
           node-version: '22'
 
       - name: Build production site
+        env:
+          GOOGLE_SITE_VERIFICATION: ${{ vars.GOOGLE_SITE_VERIFICATION }}
         run: npm run build
 
       - name: Setup Pages

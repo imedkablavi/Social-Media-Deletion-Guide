@@ -70,7 +70,7 @@ test('localized service pages preserve language and RTL metadata', async ({ page
 test('topic index exposes focused crawlable growth hubs', async ({ page }) => {
   await page.goto('/en/topics/');
   await expect(page.locator('h1')).toContainText('Deletion topics');
-  await expect(page.locator('.topic-index a')).toHaveCount(8);
+  await expect(page.locator('.topic-index a')).toHaveCount(12);
   await expect(page.locator('a[href$="/en/topics/delete-ai-accounts/"]')).toBeVisible();
   await expect(page.locator('a[href$="/en/topics/delete-social-media-accounts/"]')).toBeVisible();
   await expect(page.locator('a[href$="/en/topics/export-account-data/"]')).toBeVisible();
@@ -126,12 +126,45 @@ test('id-targeted growth hubs include intended services only', async ({ page }) 
   }
 });
 
+test('third growth batch targets reviewed high-intent deletion queries', async ({ page }) => {
+  await page.goto('/en/services/twitter/');
+  await expect(page).toHaveTitle(/Delete X \(Twitter\) Account/);
+  await expect(page.locator('.guide-insight')).toContainText('30-day');
+  await expect(page.locator('.guide-insight')).toContainText('third-party');
+
+  await page.goto('/ar/services/linkedin/');
+  await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
+  await expect(page.locator('.guide-insight')).toContainText('30 يوماً');
+  await expect(page.locator('.guide-insight')).toContainText('24 ساعة');
+
+  await page.goto('/tr/services/adobe/');
+  await expect(page.locator('.guide-insight')).toContainText('27 gün');
+
+  await page.goto('/fr/services/ebay/');
+  await expect(page.locator('.guide-insight')).toContainText('14 jours');
+  await expect(page.locator('.guide-insight')).toContainText('60 jours');
+});
+
+test('batch 3 intent hubs expose only targeted account clusters', async ({ page }) => {
+  await page.goto('/en/topics/delete-payment-and-marketplace-accounts/');
+  for (const id of ['paypal', 'ebay', 'amazon']) {
+    await expect(page.locator(`a[href$="/en/services/${id}/"]`)).toBeVisible();
+  }
+  await expect(page.locator('a[href$="/en/services/netflix/"]')).toHaveCount(0);
+
+  await page.goto('/ar/topics/delete-work-and-cloud-accounts/');
+  await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
+  for (const id of ['linkedin', 'slack', 'zoom', 'adobe', 'dropbox', 'github', 'microsoft']) {
+    await expect(page.locator(`a[href$="/ar/services/${id}/"]`)).toBeVisible();
+  }
+});
+
 test('production sitemap discovers localized service and topic URLs', async ({ request }) => {
   const response = await request.get('/sitemap.xml');
   expect(response.ok()).toBeTruthy();
   const xml = await response.text();
   const locations = [...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map(match => match[1]);
-  expect(locations.length).toBeGreaterThan(288);
+  expect(locations.length).toBeGreaterThan(304);
   expect(locations).toContain('https://imedkablavi.github.io/Social-Media-Deletion-Guide/en/services/openai/');
   expect(locations).toContain('https://imedkablavi.github.io/Social-Media-Deletion-Guide/ar/services/openai/');
   expect(locations).toContain('https://imedkablavi.github.io/Social-Media-Deletion-Guide/tr/services/instagram/');
@@ -142,4 +175,10 @@ test('production sitemap discovers localized service and topic URLs', async ({ r
   expect(locations).toContain('https://imedkablavi.github.io/Social-Media-Deletion-Guide/en/topics/delete-gaming-accounts/');
   expect(locations).toContain('https://imedkablavi.github.io/Social-Media-Deletion-Guide/ar/topics/account-deletion-grace-periods/');
   expect(locations).toContain('https://imedkablavi.github.io/Social-Media-Deletion-Guide/fr/topics/cancel-subscriptions-before-deleting/');
+  expect(locations).toContain('https://imedkablavi.github.io/Social-Media-Deletion-Guide/en/services/twitter/');
+  expect(locations).toContain('https://imedkablavi.github.io/Social-Media-Deletion-Guide/ar/services/linkedin/');
+  expect(locations).toContain('https://imedkablavi.github.io/Social-Media-Deletion-Guide/en/topics/deactivate-vs-delete-social-accounts/');
+  expect(locations).toContain('https://imedkablavi.github.io/Social-Media-Deletion-Guide/ar/topics/delete-work-and-cloud-accounts/');
+  expect(locations).toContain('https://imedkablavi.github.io/Social-Media-Deletion-Guide/fr/topics/delete-payment-and-marketplace-accounts/');
+  expect(locations).toContain('https://imedkablavi.github.io/Social-Media-Deletion-Guide/tr/topics/cancel-streaming-before-deleting/');
 });

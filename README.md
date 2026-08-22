@@ -64,6 +64,25 @@ Examples include X, Instagram, Facebook, Threads, Bluesky, Mastodon, Tumblr, Tik
 
 The live JavaScript catalog is the source of truth, so the exact count can grow without manually rewriting this section.
 
+## Popular account-deletion search guides
+
+The production site includes crawlable, reviewed pages for common high-intent tasks rather than relying only on the interactive directory. Current examples include:
+
+- [Delete X (Twitter) account](https://imedkablavi.github.io/Social-Media-Deletion-Guide/en/services/twitter/)
+- [Delete LinkedIn account](https://imedkablavi.github.io/Social-Media-Deletion-Guide/en/services/linkedin/)
+- [Delete PayPal account and personal data](https://imedkablavi.github.io/Social-Media-Deletion-Guide/en/services/paypal/)
+- [Delete Netflix account vs cancel membership](https://imedkablavi.github.io/Social-Media-Deletion-Guide/en/services/netflix/)
+- [Delete Dropbox account](https://imedkablavi.github.io/Social-Media-Deletion-Guide/en/services/dropbox/)
+- [Delete Adobe account](https://imedkablavi.github.io/Social-Media-Deletion-Guide/en/services/adobe/)
+- [Delete or deactivate Slack account](https://imedkablavi.github.io/Social-Media-Deletion-Guide/en/services/slack/)
+- [Delete Zoom account](https://imedkablavi.github.io/Social-Media-Deletion-Guide/en/services/zoom/)
+- [Delete Pinterest account](https://imedkablavi.github.io/Social-Media-Deletion-Guide/en/services/pinterest/)
+- [Close eBay account](https://imedkablavi.github.io/Social-Media-Deletion-Guide/en/services/ebay/)
+
+Focused topic hubs connect related intents such as [deactivate vs delete social accounts](https://imedkablavi.github.io/Social-Media-Deletion-Guide/en/topics/deactivate-vs-delete-social-accounts/), [work and cloud account deletion](https://imedkablavi.github.io/Social-Media-Deletion-Guide/en/topics/delete-work-and-cloud-accounts/), and [payment / marketplace account deletion](https://imedkablavi.github.io/Social-Media-Deletion-Guide/en/topics/delete-payment-and-marketplace-accounts/).
+
+Search targeting is maintained in [data/search-intents.json](data/search-intents.json), and the production indexing workflow is documented in [docs/SEARCH_CONSOLE.md](docs/SEARCH_CONSOLE.md).
+
 ## Resource types
 
 The project avoids collapsing unrelated actions into one generic "delete" button.

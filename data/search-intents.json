@@ -1,0 +1,16 @@
+{
+  "reviewed": "2026-08-22",
+  "method": "High-intent account-deletion query phrases verified against current first-party provider terminology and live search results; this file intentionally does not claim search-volume estimates.",
+  "targets": [
+    { "service": "twitter", "query": "delete Twitter account", "preferredTitleTerm": "Delete X (Twitter) Account", "officialSource": "https://help.x.com/en/managing-your-account/how-to-deactivate-x-account" },
+    { "service": "linkedin", "query": "delete LinkedIn account", "preferredTitleTerm": "Delete LinkedIn Account", "officialSource": "https://www.linkedin.com/help/linkedin/answer/a1342613" },
+    { "service": "paypal", "query": "delete PayPal account", "preferredTitleTerm": "Delete PayPal Account", "officialSource": "https://www.paypal.com/us/cshelp/article/how-do-i-manage-my-personal-data-and-privacy-settings-on-my-paypal-account-help337" },
+    { "service": "netflix", "query": "delete Netflix account", "preferredTitleTerm": "Delete Netflix Account", "officialSource": "https://help.netflix.com/en/node/100625" },
+    { "service": "dropbox", "query": "delete Dropbox account", "preferredTitleTerm": "Delete Dropbox Account", "officialSource": "https://help.dropbox.com/account-access/delete-account" },
+    { "service": "adobe", "query": "delete Adobe account", "preferredTitleTerm": "Delete Adobe Account", "officialSource": "https://helpx.adobe.com/account/individual/manage-your-account/delete-adobe-account.html" },
+    { "service": "slack", "query": "delete Slack account", "preferredTitleTerm": "Delete or Deactivate Slack Account", "officialSource": "https://slack.com/help/articles/203953146-Deactivate-your-Slack-account" },
+    { "service": "zoom", "query": "delete Zoom account", "preferredTitleTerm": "Delete Zoom Account", "officialSource": "https://support.zoom.com/hc/en/article?id=zm_kb&sysparm_article=KB0067341" },
+    { "service": "pinterest", "query": "delete Pinterest account", "preferredTitleTerm": "Delete Pinterest Account", "officialSource": "https://help.pinterest.com/en/article/deactivate-or-close-your-account" },
+    { "service": "ebay", "query": "close eBay account", "preferredTitleTerm": "Close eBay Account", "officialSource": "https://www.ebay.com/help/account/changing-account-settings/closing-account-deleting-data?id=4199" }
+  ]
+}

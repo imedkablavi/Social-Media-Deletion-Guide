@@ -26,6 +26,12 @@ jobs:
       - name: Build effective URL list
         run: node scripts/export-effective-urls.js > effective-urls.txt
 
+      # Provider-owned external URLs are checked here. The project's own generated
+      # Pages URLs are deliberately excluded because PRs create new local routes
+      # before those routes exist on the currently deployed main site. Internal
+      # production routes are instead validated from the PR's dist build by
+      # validate-indexing.js and Playwright.
+      #
       # Some authenticated/provider endpoints intentionally reject non-browser bots.
       # Exclusions stay exact and narrow; public deletion/help URLs remain checked.
       # TikTok's two section pages below were browser-verified during final QA but
@@ -41,6 +47,7 @@ jobs:
             --max-retries 2
             --timeout 20
             --accept 200,204,206,301,302,303,307,308,401,403,405,429
+            --exclude '^https://imedkablavi\.github\.io/Social-Media-Deletion-Guide/'
             --exclude '^https://accounts\.snapchat\.com/'
             --exclude '^https://accounts\.nintendo\.com/'
             --exclude '^https://my\.telegram\.org/'

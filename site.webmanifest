@@ -1,0 +1,18 @@
+{
+  "name": "Account Deletion & Privacy Guide",
+  "short_name": "Deletion Guide",
+  "description": "Official account deletion, AI activity, privacy, security and data export links for popular online services.",
+  "start_url": "/Social-Media-Deletion-Guide/",
+  "scope": "/Social-Media-Deletion-Guide/",
+  "display": "standalone",
+  "background_color": "#0d1117",
+  "theme_color": "#0d1117",
+  "icons": [
+    {
+      "src": "assets/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

@@ -20,6 +20,15 @@
     const titleFor = (resource, lang) => resource?.title?.[lang] || resource?.title?.en || resource?.title?.ar || resource?.url || '';
     const platformNameFor = (platform, langData) => platform.displayName || langData?.platforms?.[platform.name] || platform.name;
     const difficultyLabel = value => text(`difficulty${value.charAt(0).toUpperCase()}${value.slice(1)}Label`, value);
+    const noteFor = (platform, lang) => {
+        if (!platform?.note) return '';
+        if (typeof platform.note === 'string') return lang === 'en' ? platform.note : '';
+        return platform.note[lang] || platform.note.en || '';
+    };
+    const scopeLabel = scope => {
+        const key = String(scope || '').replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
+        return text(`scope${key.charAt(0).toUpperCase()}${key.slice(1)}`, String(scope || '').replaceAll('-', ' '));
+    };
 
     function readableIconColor(color) {
         const value = String(color || '').replace('#', '');
@@ -136,9 +145,10 @@
             const selected = this.selectedPlatforms.includes(platform.id);
             const name = platformNameFor(platform, langData);
             const category = categories[platform.category]?.[lang] || platform.category;
+            const resourceLabel = text('resourcesCountLabel', 'resources');
 
             return `<button class="platform-card ${selected ? 'active' : ''}" data-id="${escapeHtml(platform.id)}" type="button"
-                onclick="uiManager.selectPlatform('${escapeHtml(platform.id)}')" aria-pressed="${selected}" aria-label="${escapeHtml(name)}, ${resourceCount} resources">
+                onclick="uiManager.selectPlatform('${escapeHtml(platform.id)}')" aria-pressed="${selected}" aria-label="${escapeHtml(name)}, ${languageManager.formatNumber(resourceCount)} ${escapeHtml(resourceLabel)}">
                 <div class="platform-card-top">
                     ${brandMarkup(platform, name)}
                     <span class="resource-total">${languageManager.formatNumber(resourceCount)}</span>
@@ -200,8 +210,9 @@
                     ${items.map(resource => {
                         const platform = resource.platform;
                         const platformName = platformNameFor(platform, langData);
+                        const note = noteFor(platform, lang);
                         const warning = resource.destructiveScope
-                            ? `<span class="scope-warning"><i class="fas fa-triangle-exclamation" aria-hidden="true"></i> ${escapeHtml(text('entireAccount', 'Entire account'))}: ${escapeHtml(resource.destructiveScope.replace('-', ' '))}</span>` : '';
+                            ? `<span class="scope-warning"><i class="fas fa-triangle-exclamation" aria-hidden="true"></i> ${escapeHtml(text('entireAccount', 'Entire account'))}: ${escapeHtml(scopeLabel(resource.destructiveScope))}</span>` : '';
                         return `<article class="resource-card">
                             <a href="${escapeHtml(resource.url)}" target="_blank" rel="noopener noreferrer" class="resource-link">
                                 <div class="resource-service">${brandMarkup(platform, platformName)}<span>${escapeHtml(platformName)}</span></div>
@@ -212,7 +223,7 @@
                                     ${platform.loginRequired ? `<span><i class="fas fa-lock" aria-hidden="true"></i> ${escapeHtml(text('signIn', 'Sign-in'))}</span>` : ''}
                                     ${warning}
                                 </div>
-                                ${platform.note ? `<p class="resource-note">${escapeHtml(platform.note)}</p>` : ''}
+                                ${note ? `<p class="resource-note">${escapeHtml(note)}</p>` : ''}
                                 <span class="open-resource">${escapeHtml(text('openOfficialPage', 'Open official page'))} <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i></span>
                             </a>
                         </article>`;

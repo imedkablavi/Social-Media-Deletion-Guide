@@ -72,7 +72,7 @@ test('generated localized SEO pages preserve language-specific content', async (
 
   await page.goto('/tr/services/facebook/');
   await expect(page.locator('html')).toHaveAttribute('lang', 'tr');
-  await expect(page.locator('.resource-card')).toContainText('Facebook hesabını kalıcı olarak sil');
+  await expect(page.locator('.resource-card').filter({ hasText: 'Facebook hesabını kalıcı olarak sil' })).toHaveCount(1);
   await expect(page.locator('body')).not.toContainText('How to permanently delete Facebook account');
 
   await page.goto('/fr/services/');

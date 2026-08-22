@@ -78,6 +78,23 @@ for (const lang of LANGS) {
     }
 }
 
+const scriptOrder = [...indexHtml.matchAll(/<script\s+defer\s+src="([^"]+)"/g)]
+    .map(match => match[1].split('?', 1)[0]);
+const maintenance = scriptOrder.indexOf('js/catalog-maintenance.js');
+const localization = scriptOrder.indexOf('js/localization-integrity.js');
+const brands = scriptOrder.indexOf('js/brand-icons.js');
+if (localization < 0) fail('index.html does not load js/localization-integrity.js');
+if (!(maintenance >= 0 && maintenance < localization && localization < brands)) {
+    fail('localization-integrity.js must load after catalog-maintenance.js and before brand/UI rendering');
+}
+
+const loader = fs.readFileSync(path.join(ROOT, 'scripts/load-catalog.js'), 'utf8');
+const loaderMaintenance = loader.indexOf("require('../js/catalog-maintenance.js')");
+const loaderLocalization = loader.indexOf("require('../js/localization-integrity.js')");
+if (!(loaderMaintenance >= 0 && loaderMaintenance < loaderLocalization)) {
+    fail('build catalog must apply localization-integrity.js after catalog-maintenance.js');
+}
+
 if (errors.length) {
     console.error(`Localization audit failed with ${errors.length} issue(s):`);
     for (const error of errors) console.error(`- ${error}`);

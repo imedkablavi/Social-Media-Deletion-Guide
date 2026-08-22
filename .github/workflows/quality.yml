@@ -35,6 +35,9 @@ jobs:
       - name: Validate source, generated SEO pages and catalog
         run: python scripts/validate.py
 
+      - name: Validate curated growth pages and topic hubs
+        run: node scripts/validate-growth.js
+
       - name: Build effective user-visible URL list
         run: |
           node scripts/export-effective-urls.js > /tmp/effective-urls.txt

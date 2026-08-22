@@ -26,7 +26,10 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Validate HTML, discovery files and catalog
+      - name: Build production site
+        run: npm run build
+
+      - name: Validate source, generated SEO pages and catalog
         run: python scripts/validate.py
 
       - name: Build effective user-visible URL list

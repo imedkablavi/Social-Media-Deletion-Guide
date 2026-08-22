@@ -54,16 +54,52 @@ p { max-width: 78ch; }
 .service-index { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; margin-top: 28px; }
 .service-index a { display: block; border: 1px solid var(--border); background: var(--panel-soft); border-radius: 8px; padding: 14px; color: var(--text); text-decoration: none; }
 .service-index small { display: block; color: var(--muted); margin-top: 3px; }
+
+/* Reviewed growth content is visually distinct from catalog metadata. */
+.guide-insight {
+  margin: 34px 0 8px;
+  padding: 22px 24px;
+  border: 1px solid #3d4f64;
+  border-radius: 10px;
+  background: #111923;
+}
+.guide-insight h2 { margin: 5px 0 10px; font-size: 1.35rem; }
+.guide-insight p { color: #c9d1d9; }
+.editorial-review {
+  color: #a8c7fa;
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .035em;
+  text-transform: uppercase;
+}
+.insight-list { margin: 14px 0 0; padding-left: 1.25rem; }
+.insight-list li { margin: 9px 0; color: #d7dee7; }
+.topic-links a { border-color: #35465a; }
+.topic-copy {
+  margin-top: 34px;
+  padding-top: 2px;
+  border-top: 1px solid var(--border);
+}
+.topic-copy h2 { margin-top: 28px; }
+.topic-copy p { color: #c9d1d9; }
+.topic-index { grid-template-columns: repeat(2,minmax(0,1fr)); }
+.topic-index a { min-height: 132px; }
+.topic-index strong { display: block; font-size: 1.05rem; }
+.topic-index small { margin-top: 8px; line-height: 1.5; }
+.topic-service-index { margin-top: 16px; }
+
 footer { border-top: 1px solid var(--border); color: var(--muted); padding: 28px 0 42px; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 :focus-visible { outline: 3px solid #79c0ff; outline-offset: 3px; }
 html[dir="rtl"] body { text-align: right; }
 html[dir="rtl"] .note { border-left: 0; border-right: 3px solid var(--warning); border-radius: 7px 0 0 7px; }
-html[dir="rtl"] .checklist { padding-left: 0; padding-right: 1.25rem; }
+html[dir="rtl"] .checklist,
+html[dir="rtl"] .insight-list { padding-left: 0; padding-right: 1.25rem; }
 @media (max-width: 760px) {
   main { padding-top: 30px; }
   .summary-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
-  .service-index, .related-grid { grid-template-columns: 1fr; }
+  .service-index, .related-grid, .topic-index { grid-template-columns: 1fr; }
   .site-header .container { align-items: flex-start; flex-direction: column; padding-block: 14px; }
+  .guide-insight { padding: 18px; }
 }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }

@@ -55,8 +55,12 @@ class LanguageManager {
     }
 
     ensureAccessibleLabels() {
-        const githubLink = document.querySelector('.nav-github');
-        if (githubLink) githubLink.setAttribute('aria-label', 'GitHub repository');
+        const langData = this.getCurrentLanguageData();
+        if (!langData) return;
+        document.querySelectorAll('[data-key-aria-label]').forEach(element => {
+            const value = langData[element.getAttribute('data-key-aria-label')];
+            if (value != null) element.setAttribute('aria-label', value);
+        });
     }
 
     toggleLanguageDropdown() {
@@ -124,6 +128,11 @@ class LanguageManager {
         document.querySelectorAll('[data-key-placeholder]').forEach(element => {
             const value = langData[element.getAttribute('data-key-placeholder')];
             if (value != null) element.setAttribute('placeholder', value);
+        });
+
+        document.querySelectorAll('[data-key-aria-label]').forEach(element => {
+            const value = langData[element.getAttribute('data-key-aria-label')];
+            if (value != null) element.setAttribute('aria-label', value);
         });
 
         document.querySelectorAll('[data-tooltip-key]').forEach(element => {

@@ -10,7 +10,7 @@
     <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1">
     <meta name="author" content="Imed Kablavi">
     <meta name="theme-color" content="#0d1117">
-    <meta name="app-version" content="3.2.1-20260821">
+    <meta name="app-version" content="3.2.1-20260822-l10n">
 
     <link rel="canonical" href="https://imedkablavi.github.io/Social-Media-Deletion-Guide/">
 
@@ -28,8 +28,8 @@
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="preconnect" href="https://cdn.simpleicons.org" crossorigin>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css">
-    <link rel="stylesheet" href="css/professional.css?v=20260821-0645">
-    <link rel="stylesheet" href="css/a11y.css?v=20260821-0645">
+    <link rel="stylesheet" href="css/professional.css?v=20260822-1615">
+    <link rel="stylesheet" href="css/a11y.css?v=20260822-1615">
 
     <script type="application/ld+json">
     {
@@ -68,24 +68,25 @@
     }
     </script>
 
-    <script defer src="js/translations.js?v=20260821-0645"></script>
-    <script defer src="js/translations-updates.js?v=20260821-0645"></script>
-    <script defer src="js/platforms.js?v=20260821-0645"></script>
-    <script defer src="js/catalog-updates.js?v=20260821-0645"></script>
-    <script defer src="js/ai-catalog.js?v=20260821-0645"></script>
-    <script defer src="js/catalog-maintenance.js?v=20260821-0645"></script>
-    <script defer src="js/brand-icons.js?v=20260821-0645"></script>
-    <script defer src="js/language-manager.js?v=20260821-0645"></script>
-    <script defer src="js/ui-manager.js?v=20260821-0645"></script>
-    <script defer src="js/pro-ui.js?v=20260821-0645"></script>
-    <script defer src="js/app.js?v=20260821-0645"></script>
+    <script defer src="js/translations.js?v=20260822-1615"></script>
+    <script defer src="js/translations-updates.js?v=20260822-1615"></script>
+    <script defer src="js/platforms.js?v=20260822-1615"></script>
+    <script defer src="js/catalog-updates.js?v=20260822-1615"></script>
+    <script defer src="js/ai-catalog.js?v=20260822-1615"></script>
+    <script defer src="js/catalog-maintenance.js?v=20260822-1615"></script>
+    <script defer src="js/localization-integrity.js?v=20260822-1615"></script>
+    <script defer src="js/brand-icons.js?v=20260822-1615"></script>
+    <script defer src="js/language-manager.js?v=20260822-1615"></script>
+    <script defer src="js/ui-manager.js?v=20260822-1615"></script>
+    <script defer src="js/pro-ui.js?v=20260822-1615"></script>
+    <script defer src="js/app.js?v=20260822-1615"></script>
 </head>
 <body>
     <a class="skip-link" href="#directory" data-key="skipDirectory">Skip to directory</a>
 
     <div class="wrapper">
-        <nav class="site-nav" aria-label="Primary navigation">
-            <a class="brand-mark" href="#top" aria-label="Account Deletion Guide home">
+        <nav class="site-nav" aria-label="Primary navigation" data-key-aria-label="navPrimaryLabel">
+            <a class="brand-mark" href="#top" aria-label="Account Deletion Guide home" data-key-aria-label="brandHomeLabel">
                 <span class="brand-mark-icon"><i class="fas fa-shield-halved" aria-hidden="true"></i></span>
                 <span data-key="brandLabel">Account Deletion Guide</span>
             </a>
@@ -93,11 +94,11 @@
             <div class="nav-actions">
                 <a class="nav-link-btn" href="#directory" data-key="navDirectory">Directory</a>
                 <button class="nav-link-btn" id="showAiOnly" type="button" data-key="navAI">AI services</button>
-                <a class="nav-github" href="https://github.com/imedkablavi/Social-Media-Deletion-Guide" target="_blank" rel="noopener noreferrer">
+                <a class="nav-github" href="https://github.com/imedkablavi/Social-Media-Deletion-Guide" target="_blank" rel="noopener noreferrer" aria-label="GitHub repository" data-key-aria-label="githubRepositoryLabel">
                     <i class="fab fa-github" aria-hidden="true"></i><span>GitHub</span>
                 </a>
                 <div class="language-selector">
-                    <button class="language-btn" id="languageBtn" type="button" aria-label="Change language" aria-haspopup="true" aria-expanded="false" aria-controls="languageDropdown">
+                    <button class="language-btn" id="languageBtn" type="button" aria-label="Change language" data-key-aria-label="changeLanguageLabel" aria-haspopup="true" aria-expanded="false" aria-controls="languageDropdown">
                         <i class="fas fa-globe" aria-hidden="true"></i><span id="currentLang">English</span>
                     </button>
                     <div class="language-dropdown" id="languageDropdown" role="menu">
@@ -121,7 +122,7 @@
                     <a class="secondary-action" href="https://github.com/imedkablavi/Social-Media-Deletion-Guide/issues/new?template=broken-link.yml" target="_blank" rel="noopener noreferrer"><i class="fas fa-link-slash" aria-hidden="true"></i><span data-key="reportBrokenLink">Report a broken link</span></a>
                 </div>
 
-                <div class="hero-stats-badges" id="heroBadges" aria-label="Directory statistics">
+                <div class="hero-stats-badges" id="heroBadges" aria-label="Directory statistics" data-key-aria-label="directoryStatsLabel">
                     <div class="hs-badge"><span id="platformCountHero">0</span><small data-key="servicesLabel">services</small></div>
                     <div class="hs-badge"><span id="resourceCountHero">0</span><small data-key="resourcesLabel">official resources</small></div>
                     <div class="hs-badge"><span id="selectedCountHero">0</span><small data-key="selectedLabel">selected</small></div>
@@ -130,7 +131,7 @@
         </header>
 
         <main class="content-section" id="directory">
-            <section class="principles" aria-label="Directory principles">
+            <section class="principles" aria-label="Directory principles" data-key-aria-label="directoryPrinciplesLabel">
                 <div class="principle"><strong><i class="fas fa-building" aria-hidden="true"></i><span data-key="principleOfficialTitle">First-party links</span></strong><span data-key="principleOfficialDesc">Provider-owned help centers and settings are preferred.</span></div>
                 <div class="principle"><strong><i class="fas fa-clock-rotate-left" aria-hidden="true"></i><span data-key="principleMaintainedTitle">Maintained catalog</span></strong><span data-key="principleMaintainedDesc">Automated link checks plus manual verification metadata.</span></div>
                 <div class="principle"><strong><i class="fas fa-user-shield" aria-hidden="true"></i><span data-key="principleScopeTitle">Clear scope</span></strong><span data-key="principleScopeDesc">Account deletion is separated from AI history and subscription cancellation.</span></div>
@@ -144,22 +145,22 @@
                 <div class="toolbar-meta"><span class="result-pill" id="resultCount">0 services</span><span class="result-pill" id="verifiedCount">0 official links</span></div>
             </div>
 
-            <section class="directory-shell" aria-label="Account deletion directory">
+            <section class="directory-shell" aria-label="Account deletion directory" data-key-aria-label="directoryAriaLabel">
                 <div class="directory-toolbar">
                     <div class="toolbar-top">
                         <div class="search-container">
                             <div class="search-icon"><i class="fas fa-magnifying-glass" aria-hidden="true"></i></div>
-                            <input type="search" class="search-input" id="searchInput" data-key-placeholder="search" placeholder="Search ChatGPT, Instagram, Discord, Google..." aria-label="Search platforms and resources" autocomplete="off">
+                            <input type="search" class="search-input" id="searchInput" data-key-placeholder="search" placeholder="Search ChatGPT, Instagram, Discord, Google..." aria-label="Search platforms and resources" data-key-aria-label="searchAriaLabel" autocomplete="off">
                         </div>
                     </div>
-                    <div class="filter-row" aria-label="Category filters">
+                    <div class="filter-row" aria-label="Category filters" data-key-aria-label="categoryFiltersLabel">
                         <button type="button" class="filter-chip active" data-category-filter="all" data-key="filterAll">All</button>
                         <button type="button" class="filter-chip" data-category-filter="ai" data-key="filterAI">AI</button>
                         <button type="button" class="filter-chip" data-category-filter="social" data-key="filterSocial">Social</button>
                         <button type="button" class="filter-chip" data-category-filter="messaging" data-key="filterMessaging">Messaging</button>
                         <button type="button" class="filter-chip" data-category-filter="service" data-key="filterServices">Services</button>
                         <button type="button" class="filter-chip" data-category-filter="security" data-key="filterSecurity">Security</button>
-                        <select class="filter-select" id="difficultyFilter" aria-label="Deletion difficulty">
+                        <select class="filter-select" id="difficultyFilter" aria-label="Deletion difficulty" data-key-aria-label="difficultyAriaLabel">
                             <option value="all" data-key="difficultyAny">Any difficulty</option>
                             <option value="easy" data-key="difficultyEasy">Easy deletion</option>
                             <option value="medium" data-key="difficultyMedium">Medium deletion</option>
@@ -169,7 +170,7 @@
                 </div>
 
                 <button class="reset-btn" id="resetBtn" type="button"><i class="fas fa-rotate-left" aria-hidden="true"></i><span data-key="reset">Reset</span></button>
-                <section class="platforms-section" aria-label="Supported platforms"><div id="platformsGrid" class="platforms-grid"></div></section>
+                <section class="platforms-section" aria-label="Supported platforms" data-key-aria-label="supportedPlatformsLabel"><div id="platformsGrid" class="platforms-grid"></div></section>
                 <section class="resources-section" id="resourcesSection" aria-live="polite"><div id="resourcesGrid" class="resources-grid"></div></section>
                 <div class="no-results" id="noResults" role="status"><i class="fas fa-magnifying-glass" aria-hidden="true"></i><h3 data-key="noResults">No results</h3><p data-key="noResultsDesc">Try another search or clear the filters.</p></div>
             </section>
@@ -194,7 +195,7 @@
                     <h3 data-key="editorialMaintainTitle">How links stay useful</h3>
                     <p data-key="editorialMaintainText">The repository runs automated external-link checks and accepts broken-link reports through GitHub. Verification dates in the catalog make it easier to identify entries that need another manual review when providers redesign account settings.</p>
                 </div>
-                <p class="supported-services"><strong data-key="popularSupportedLabel">Popular supported services:</strong> OpenAI / ChatGPT, Claude, Google Gemini, Perplexity, Microsoft Copilot, Instagram, Facebook, X, TikTok, Discord, Telegram, WhatsApp, GitHub, GitLab, Google, Microsoft, Apple, Netflix, Spotify, Steam, PlayStation, Notion, Figma, Airbnb, Uber and more.</p>
+                <p class="supported-services"><strong data-key="popularSupportedLabel">Popular supported services:</strong> <span data-key="popularSupportedList">OpenAI / ChatGPT, Claude, Google Gemini, Perplexity, Microsoft Copilot, Instagram, Facebook, X, TikTok, Discord, Telegram, WhatsApp, GitHub, GitLab, Google, Microsoft, Apple, Netflix, Spotify, Steam, PlayStation, Notion, Figma, Airbnb, Uber and more.</span></p>
             </section>
         </main>
 

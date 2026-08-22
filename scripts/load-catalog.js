@@ -16,6 +16,7 @@ function loadCatalog() {
     require('../js/catalog-updates.js');
     require('../js/ai-catalog.js');
     require('../js/catalog-maintenance.js');
+    require('../js/localization-integrity.js');
 
     return {
         platforms: global.platforms,

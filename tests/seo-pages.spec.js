@@ -7,7 +7,7 @@ test('service index exposes crawlable links for the full catalog', async ({ page
 
   const hrefs = await page.locator('.service-index a').evaluateAll(links => links.map(link => link.href));
   expect(hrefs.every(href => /\/en\/services\/[^/]+\/$/.test(href))).toBeTruthy();
-  await expect(page.locator('a[href$="/en/topics/"]')).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Deletion topics', exact: true })).toBeVisible();
 });
 
 test('service pages have canonical, hreflang, structured data and official resources', async ({ page }) => {

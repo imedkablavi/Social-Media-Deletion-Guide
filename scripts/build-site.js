@@ -10,7 +10,10 @@
 const fs = require('fs');
 const path = require('path');
 const { loadCatalog } = require('./load-catalog.js');
-const { GUIDE_CONTENT, TOPIC_PAGES } = require('./growth-content.js');
+const { GUIDE_CONTENT: GUIDE_CONTENT_BASE, TOPIC_PAGES: TOPIC_PAGES_BASE } = require('./growth-content.js');
+const { GUIDE_CONTENT_BATCH2, TOPIC_PAGES_BATCH2 } = require('./growth-batch-2.js');
+const GUIDE_CONTENT = { ...GUIDE_CONTENT_BASE, ...GUIDE_CONTENT_BATCH2 };
+const TOPIC_PAGES = { ...TOPIC_PAGES_BASE, ...TOPIC_PAGES_BATCH2 };
 
 const ROOT = path.resolve(__dirname, '..');
 const DIST = path.join(ROOT, 'dist');
@@ -217,6 +220,7 @@ function relatedLinks(platform, lang) {
 function topicMatchesPlatform(topic, platform) {
     if (topic.kind === 'category') return platform.category === topic.value;
     if (topic.kind === 'resourceType') return (platform.resources || []).some(resource => resource.type === topic.value);
+    if (topic.kind === 'ids') return Array.isArray(topic.value) && topic.value.includes(platform.id);
     return false;
 }
 

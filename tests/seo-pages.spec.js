@@ -70,7 +70,7 @@ test('localized service pages preserve language and RTL metadata', async ({ page
 test('topic index exposes focused crawlable growth hubs', async ({ page }) => {
   await page.goto('/en/topics/');
   await expect(page.locator('h1')).toContainText('Deletion topics');
-  await expect(page.locator('.topic-index a')).toHaveCount(4);
+  await expect(page.locator('.topic-index a')).toHaveCount(8);
   await expect(page.locator('a[href$="/en/topics/delete-ai-accounts/"]')).toBeVisible();
   await expect(page.locator('a[href$="/en/topics/delete-social-media-accounts/"]')).toBeVisible();
   await expect(page.locator('a[href$="/en/topics/export-account-data/"]')).toBeVisible();
@@ -93,12 +93,45 @@ test('topic pages provide unique copy, service links and search metadata', async
   await expect(page.locator('h1')).toContainText('حذف حسابات التواصل الاجتماعي');
 });
 
+test('second growth batch adds reviewed high-intent service guidance', async ({ page }) => {
+  await page.goto('/en/services/discord/');
+  await expect(page).toHaveTitle(/Delete Discord Account/);
+  await expect(page.locator('.guide-insight')).toContainText('15 days');
+  await expect(page.locator('.guide-insight')).toContainText('transfer ownership');
+
+  await page.goto('/ar/services/microsoft/');
+  await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
+  await expect(page.locator('.guide-insight')).toContainText('30 أو 60');
+
+  await page.goto('/tr/services/spotify/');
+  await expect(page.locator('.guide-insight')).toContainText('7 gün');
+
+  await page.goto('/fr/services/steam/');
+  await expect(page.locator('.guide-insight')).toContainText('preuve');
+});
+
+test('id-targeted growth hubs include intended services only', async ({ page }) => {
+  await page.goto('/en/topics/delete-gaming-accounts/');
+  for (const id of ['steam', 'epicgames', 'playstation']) {
+    await expect(page.locator(`a[href$="/en/services/${id}/"]`)).toBeVisible();
+  }
+  for (const id of ['google', 'microsoft', 'amazon']) {
+    await expect(page.locator(`a[href$="/en/services/${id}/"]`)).toHaveCount(0);
+  }
+
+  await page.goto('/ar/topics/account-deletion-grace-periods/');
+  await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
+  for (const id of ['facebook', 'discord', 'microsoft', 'snapchat', 'spotify']) {
+    await expect(page.locator(`a[href$="/ar/services/${id}/"]`)).toBeVisible();
+  }
+});
+
 test('production sitemap discovers localized service and topic URLs', async ({ request }) => {
   const response = await request.get('/sitemap.xml');
   expect(response.ok()).toBeTruthy();
   const xml = await response.text();
   const locations = [...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map(match => match[1]);
-  expect(locations.length).toBeGreaterThan(270);
+  expect(locations.length).toBeGreaterThan(288);
   expect(locations).toContain('https://imedkablavi.github.io/Social-Media-Deletion-Guide/en/services/openai/');
   expect(locations).toContain('https://imedkablavi.github.io/Social-Media-Deletion-Guide/ar/services/openai/');
   expect(locations).toContain('https://imedkablavi.github.io/Social-Media-Deletion-Guide/tr/services/instagram/');
@@ -106,4 +139,7 @@ test('production sitemap discovers localized service and topic URLs', async ({ r
   expect(locations).toContain('https://imedkablavi.github.io/Social-Media-Deletion-Guide/en/topics/delete-ai-accounts/');
   expect(locations).toContain('https://imedkablavi.github.io/Social-Media-Deletion-Guide/ar/topics/delete-social-media-accounts/');
   expect(locations).toContain('https://imedkablavi.github.io/Social-Media-Deletion-Guide/tr/topics/export-account-data/');
+  expect(locations).toContain('https://imedkablavi.github.io/Social-Media-Deletion-Guide/en/topics/delete-gaming-accounts/');
+  expect(locations).toContain('https://imedkablavi.github.io/Social-Media-Deletion-Guide/ar/topics/account-deletion-grace-periods/');
+  expect(locations).toContain('https://imedkablavi.github.io/Social-Media-Deletion-Guide/fr/topics/cancel-subscriptions-before-deleting/');
 });

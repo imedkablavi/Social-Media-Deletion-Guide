@@ -1,23 +1,10 @@
 #!/usr/bin/env node
 /** Export the URLs users actually see after every catalog maintenance layer runs. */
-const base = require('../js/platforms.js');
-
-global.platforms = base.platforms;
-global.categories = base.categories;
-global.resourceTypes = base.resourceTypes;
-global.translations = {
-    ar: { platforms: {} },
-    en: { platforms: {} },
-    fr: { platforms: {} },
-    tr: { platforms: {} }
-};
-
-require('../js/catalog-updates.js');
-require('../js/ai-catalog.js');
-require('../js/catalog-maintenance.js');
+const { loadCatalog } = require('./load-catalog.js');
+const { platforms } = loadCatalog();
 
 const urls = [...new Set(
-    global.platforms.flatMap(platform => (platform.resources || []).map(resource => resource.url))
+    platforms.flatMap(platform => (platform.resources || []).map(resource => resource.url))
         .filter(url => typeof url === 'string' && /^https:\/\//.test(url))
 )].sort();
 

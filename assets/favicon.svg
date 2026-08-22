@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Account Deletion Guide">
+  <rect width="64" height="64" rx="12" fill="#0d1117"/>
+  <path d="M32 8 50 15v13c0 12-7.6 22.3-18 28-10.4-5.7-18-16-18-28V15l18-7Z" fill="none" stroke="#58a6ff" stroke-width="5" stroke-linejoin="round"/>
+  <path d="m23 32 6 6 12-14" fill="none" stroke="#f0f6fc" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

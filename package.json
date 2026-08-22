@@ -3,6 +3,7 @@
   "version": "3.2.1",
   "private": true,
   "scripts": {
+    "build": "node scripts/build-site.js",
     "test:e2e": "playwright test",
     "test:static": "python3 scripts/validate.py"
   },

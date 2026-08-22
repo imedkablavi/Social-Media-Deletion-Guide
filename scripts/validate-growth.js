@@ -1,7 +1,12 @@
 #!/usr/bin/env node
 const fs = require('fs');
 const path = require('path');
-const { GUIDE_CONTENT, TOPIC_PAGES } = require('./growth-content.js');
+const { GUIDE_CONTENT: GUIDE_CONTENT_BASE, TOPIC_PAGES: TOPIC_PAGES_BASE } = require('./growth-content.js');
+const { GUIDE_CONTENT_BATCH2, TOPIC_PAGES_BATCH2 } = require('./growth-batch-2.js');
+const GUIDE_CONTENT = { ...GUIDE_CONTENT_BASE, ...GUIDE_CONTENT_BATCH2 };
+const TOPIC_PAGES = { ...TOPIC_PAGES_BASE, ...TOPIC_PAGES_BATCH2 };
+const BATCH2_GUIDES = ['facebook', 'whatsapp', 'discord', 'telegram', 'microsoft', 'apple', 'snapchat', 'spotify', 'steam', 'amazon'];
+const BATCH2_TOPICS = ['delete-gaming-accounts', 'cancel-subscriptions-before-deleting', 'protect-cloud-data-before-deletion', 'account-deletion-grace-periods'];
 
 const ROOT = path.resolve(__dirname, '..');
 const DIST = path.join(ROOT, 'dist');
@@ -20,10 +25,12 @@ function read(relative) {
 }
 
 const report = JSON.parse(read('build-report.json'));
-if (report.curatedGuides < 6) fail(`expected at least 6 curated guides, got ${report.curatedGuides}`);
+if (report.curatedGuides < 16) fail(`expected at least 16 curated guides, got ${report.curatedGuides}`);
 if (report.topicPages !== Object.keys(TOPIC_PAGES).length * LANGS.length) fail(`unexpected topic page count: ${report.topicPages}`);
 if (report.topicIndexes !== LANGS.length) fail(`unexpected topic index count: ${report.topicIndexes}`);
-if (report.sitemapUrls < 270) fail(`sitemap should contain growth hubs; got only ${report.sitemapUrls} URLs`);
+if (report.sitemapUrls < 289) fail(`sitemap should contain batch 2 growth hubs; got only ${report.sitemapUrls} URLs`);
+for (const id of BATCH2_GUIDES) if (!GUIDE_CONTENT[id]) fail(`missing batch 2 guide: ${id}`);
+for (const slug of BATCH2_TOPICS) if (!TOPIC_PAGES[slug]) fail(`missing batch 2 topic: ${slug}`);
 
 for (const [serviceId, guide] of Object.entries(GUIDE_CONTENT)) {
   if (!guide.reviewed) fail(`${serviceId} curated guide is missing reviewed date`);
@@ -56,6 +63,12 @@ for (const lang of LANGS) {
     const content = topic[lang] || topic.en;
     if (!html.includes(content.heading)) fail(`localized topic heading missing on ${lang}/${slug}`);
     if (!html.includes(`/${lang}/services/`)) fail(`topic ${lang}/${slug} has no service links`);
+    if (topic.kind === 'ids') {
+      const expectedIds = topic.value.filter(id => fs.existsSync(path.join(DIST, `${lang}/services/${id}/index.html`)));
+      for (const id of expectedIds) {
+        if (!html.includes(`/${lang}/services/${id}/`)) fail(`topic ${lang}/${slug} missing targeted service ${id}`);
+      }
+    }
   }
 }
 
@@ -69,5 +82,12 @@ for (const lang of LANGS) {
 
 const arOpenAI = read('ar/services/openai/index.html');
 if (arOpenAI.includes('Important things to know') || arOpenAI.includes('Delete ChatGPT / OpenAI Account')) fail('Arabic OpenAI growth content leaked English UI copy');
+const arFacebook = read('ar/services/facebook/index.html');
+if (arFacebook.includes('Delete Facebook permanently') || !arFacebook.includes('نافذة الإلغاء')) fail('Arabic Facebook curated content is missing or leaked English');
+const trSpotify = read('tr/services/spotify/index.html');
+if (trSpotify.includes('Delete Spotify only') || !trSpotify.includes('7 gün')) fail('Turkish Spotify curated content is missing or leaked English');
+const gamingEn = read('en/topics/delete-gaming-accounts/index.html');
+for (const id of ['steam', 'epicgames', 'playstation']) if (!gamingEn.includes(`/en/services/${id}/`)) fail(`gaming topic missing ${id}`);
+for (const id of ['google', 'microsoft', 'amazon']) if (gamingEn.includes(`/en/services/${id}/`)) fail(`gaming topic incorrectly includes ${id}`);
 
 console.log(`Growth validation passed: ${report.curatedGuides} curated guides, ${report.topicPages} topic pages, ${report.sitemapUrls} sitemap URLs.`);

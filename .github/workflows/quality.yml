@@ -26,6 +26,9 @@ jobs:
         with:
           node-version: "22"
 
+      - name: Audit four-language localization
+        run: node scripts/audit-localization.js
+
       - name: Build production site
         run: npm run build
 

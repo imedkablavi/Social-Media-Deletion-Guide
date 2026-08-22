@@ -1,4 +1,10 @@
 /* Final accessibility hardening kept separate from the visual theme. */
+
+/* Classic v2 uses light working surfaces. Keep secondary copy visually soft
+ * while maintaining WCAG AA contrast for small text. */
+:root { --muted: #5f6b7e; }
+.footer-section { color: #526074; }
+
 :where(a, button, input, select):focus-visible {
   outline: 2px solid #58a6ff;
   outline-offset: 2px;

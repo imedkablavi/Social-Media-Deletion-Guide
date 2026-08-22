@@ -30,6 +30,8 @@ jobs:
       # Exclusions stay exact and narrow; public deletion/help URLs remain checked.
       # TikTok's two section pages below were browser-verified during final QA but
       # return a synthetic 404 specifically to Lychee's automated HTTP client.
+      # Amazon's account-deletion endpoint intermittently returns 503 to Lychee
+      # while remaining the provider-owned account/data deletion route.
       - name: Check links with Lychee
         uses: lycheeverse/lychee-action@v2
         with:
@@ -48,6 +50,7 @@ jobs:
             --exclude '^https://accountscenter\.instagram\.com/'
             --exclude '^https://www\.netflix\.com/account'
             --exclude '^https://www\.paypal\.com/myaccount/'
+            --exclude '^https://www\.amazon\.com/privacy/data-deletion$'
             --exclude '^https://www\.amazon\.com/hz/privacy-central/data-requests/preview\.html$'
             --exclude '^https://support\.tiktok\.com/en/privacy-safety/account-privacy-settings$'
             --exclude '^https://support\.tiktok\.com/en/safety-hc/account-and-user-safety$'

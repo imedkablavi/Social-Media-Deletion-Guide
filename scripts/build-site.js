@@ -29,6 +29,8 @@ const LANGS = {
         before: ['Export any data you want to keep.', 'Review active subscriptions and cancel billing separately when required.', 'Check connected apps, recovery methods and security settings.', 'Use the provider-owned links below; this directory never asks for your password.'],
         signIn: 'Sign-in may be required', official: 'Official source', checked: 'Checked', entireAccount: 'Affects the entire account',
         back: 'All service guides', home: 'Directory home', language: 'Read this guide in another language',
+        breadcrumbLabel: 'Breadcrumb', languagesLabel: 'Languages', servicesLabel: 'services',
+        scopeGoogleAccount: 'Google account', scopeMicrosoftAccount: 'Microsoft account',
         intro: name => `Use the provider-owned resources below to delete or manage your ${name} account, export data, review privacy controls, or remove activity when those options are available.`,
         indexLead: 'Each page is generated from the maintained catalog and links directly to provider-owned resources. Choose a service to see deletion difficulty, verification metadata and available account actions.'
     },
@@ -41,9 +43,11 @@ const LANGS = {
         category: 'الفئة', difficulty: 'صعوبة الحذف', resources: 'المصادر الرسمية', verified: 'آخر تحقق',
         easy: 'سهل', medium: 'متوسط', hard: 'صعب', unknown: 'غير مصنف',
         officialActions: 'الإجراءات الرسمية لهذه الخدمة', beforeTitle: 'قبل حذف الحساب', relatedTitle: 'أدلة حذف حسابات مرتبطة',
-        before: ['صدّر أي بيانات تريد الاحتفاظ بها.', 'راجع الاشتراكات النشطة وألغِ الفوترة بشكل منفصل عند الحاجة.', 'تحقق من التطبيقات المرتبطة وطرق الاسترداد وإعدادات الأمان.', 'استخدم روابط مزود الخدمة أدناه؛ هذا الدليل لا يطلب كلمة مرورك أبداً.'],
+        before: ['صدّر أي بيانات تريد الاحتفاظ بها.', 'راجع الاشتراكات النشطة وألغِ الفوترة بشكل منفصل عند الحاجة.', 'تحقق من التطبيقات المرتبطة وطرق الاسترداد وإعدادات الأمان.', 'استخدم روابط مزود الخدمة أدناه؛ هذا الدليل لا يطلب كلمة مرورك أبدًا.'],
         signIn: 'قد يلزم تسجيل الدخول', official: 'مصدر رسمي', checked: 'تم التحقق', entireAccount: 'يؤثر على الحساب بالكامل',
         back: 'كل أدلة الخدمات', home: 'الصفحة الرئيسية', language: 'اقرأ هذا الدليل بلغة أخرى',
+        breadcrumbLabel: 'مسار التنقل', languagesLabel: 'اللغات', servicesLabel: 'خدمة',
+        scopeGoogleAccount: 'حساب Google', scopeMicrosoftAccount: 'حساب Microsoft',
         intro: name => `استخدم المصادر الرسمية أدناه لحذف أو إدارة حساب ${name} أو تصدير البيانات أو مراجعة إعدادات الخصوصية أو حذف النشاط عند توفر هذه الخيارات.`,
         indexLead: 'يتم إنشاء كل صفحة من الكتالوج الذي تتم صيانته وتربط مباشرة بالمصادر الرسمية للخدمة. اختر خدمة لعرض صعوبة الحذف وتاريخ التحقق والإجراءات المتاحة.'
     },
@@ -59,6 +63,8 @@ const LANGS = {
         before: ['Exportez les données que vous souhaitez conserver.', 'Vérifiez les abonnements actifs et annulez la facturation séparément si nécessaire.', 'Vérifiez les applications connectées, les méthodes de récupération et les paramètres de sécurité.', 'Utilisez les liens du fournisseur ci-dessous ; ce guide ne demande jamais votre mot de passe.'],
         signIn: 'Connexion parfois requise', official: 'Source officielle', checked: 'Vérifié', entireAccount: 'Affecte le compte entier',
         back: 'Tous les guides', home: 'Accueil du répertoire', language: 'Lire ce guide dans une autre langue',
+        breadcrumbLabel: 'Fil d’Ariane', languagesLabel: 'Langues', servicesLabel: 'services',
+        scopeGoogleAccount: 'compte Google', scopeMicrosoftAccount: 'compte Microsoft',
         intro: name => `Utilisez les ressources officielles ci-dessous pour supprimer ou gérer votre compte ${name}, exporter vos données, contrôler la confidentialité ou supprimer l’activité lorsque ces options existent.`,
         indexLead: 'Chaque page est générée depuis le catalogue maintenu et renvoie directement vers les ressources du fournisseur. Choisissez un service pour voir la difficulté, les dates de vérification et les actions disponibles.'
     },
@@ -66,14 +72,16 @@ const LANGS = {
         dir: 'ltr', name: 'Türkçe', locale: 'tr_TR',
         site: 'Hesap Silme ve Gizlilik Rehberi',
         indexTitle: 'Hizmete Göre Hesap Silme Rehberleri | Gizlilik',
-        indexDescription: 'Desteklenen çevrimiçi hizmetler için resmi hesap silme, veri dışa aktarma, gizlilik ve yapay zekâ etkinliği bağlantılarını inceleyin.',
-        eyebrow: 'Resmi hesap ve gizlilik kaynakları',
-        category: 'Kategori', difficulty: 'Silme zorluğu', resources: 'Resmi kaynaklar', verified: 'Son doğrulama',
+        indexDescription: 'Desteklenen çevrimiçi hizmetler için resmî hesap silme, veri dışa aktarma, gizlilik ve yapay zekâ etkinliği bağlantılarını inceleyin.',
+        eyebrow: 'Resmî hesap ve gizlilik kaynakları',
+        category: 'Kategori', difficulty: 'Silme zorluğu', resources: 'Resmî kaynaklar', verified: 'Son doğrulama',
         easy: 'Kolay', medium: 'Orta', hard: 'Zor', unknown: 'Derecelendirilmedi',
-        officialActions: 'Bu hizmet için resmi işlemler', beforeTitle: 'Hesabı silmeden önce', relatedTitle: 'İlgili hesap silme rehberleri',
+        officialActions: 'Bu hizmet için resmî işlemler', beforeTitle: 'Hesabı silmeden önce', relatedTitle: 'İlgili hesap silme rehberleri',
         before: ['Saklamak istediğiniz verileri dışa aktarın.', 'Etkin abonelikleri kontrol edin ve gerekiyorsa faturalandırmayı ayrıca iptal edin.', 'Bağlı uygulamaları, kurtarma yöntemlerini ve güvenlik ayarlarını gözden geçirin.', 'Aşağıdaki sağlayıcı bağlantılarını kullanın; bu rehber hiçbir zaman parolanızı istemez.'],
-        signIn: 'Oturum açmanız gerekebilir', official: 'Resmi kaynak', checked: 'Kontrol edildi', entireAccount: 'Tüm hesabı etkiler',
+        signIn: 'Oturum açmanız gerekebilir', official: 'Resmî kaynak', checked: 'Kontrol edildi', entireAccount: 'Tüm hesabı etkiler',
         back: 'Tüm hizmet rehberleri', home: 'Dizin ana sayfası', language: 'Bu rehberi başka dilde okuyun',
+        breadcrumbLabel: 'Gezinti yolu', languagesLabel: 'Diller', servicesLabel: 'hizmet',
+        scopeGoogleAccount: 'Google hesabı', scopeMicrosoftAccount: 'Microsoft hesabı',
         intro: name => `Aşağıdaki sağlayıcı kaynaklarını kullanarak ${name} hesabınızı silebilir veya yönetebilir, verilerinizi dışa aktarabilir, gizlilik ayarlarını inceleyebilir ya da mevcutsa etkinliği silebilirsiniz.`,
         indexLead: 'Her sayfa bakımı yapılan katalogdan üretilir ve doğrudan sağlayıcıya ait kaynaklara bağlanır. Silme zorluğu, doğrulama bilgisi ve kullanılabilir işlemler için bir hizmet seçin.'
     }
@@ -101,6 +109,16 @@ const resourceTypeFor = (resource, lang) => resourceTypes?.[resource.type]?.[lan
 const difficultyFor = platform => platform.difficulty || difficultyDefaults[platform.id] || 'medium';
 const latestVerified = platform => (platform.resources || []).map(resource => resource.verified).filter(Boolean).sort().at(-1) || null;
 const officialCount = platform => (platform.resources || []).filter(resource => resource.official !== false).length;
+const noteFor = (platform, lang) => {
+    if (!platform?.note) return '';
+    if (typeof platform.note === 'string') return lang === 'en' ? platform.note : '';
+    return platform.note[lang] || platform.note.en || '';
+};
+const scopeFor = (scope, lang) => {
+    const key = String(scope || '').replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
+    const prop = `scope${key.charAt(0).toUpperCase()}${key.slice(1)}`;
+    return LANGS[lang]?.[prop] || String(scope || '').replaceAll('-', ' ');
+};
 
 function ensureDir(dir) { fs.mkdirSync(dir, { recursive: true }); }
 function write(relativePath, content) {
@@ -128,7 +146,7 @@ function pageDescription(platform, lang) {
     const name = nameFor(platform, lang);
     if (lang === 'ar') return `روابط رسمية لحذف أو إدارة حساب ${name}، تصدير البيانات، مراجعة الخصوصية والأمان وحذف النشاط عند توفره.`;
     if (lang === 'fr') return `Liens officiels pour supprimer ou gérer votre compte ${name}, exporter vos données et contrôler la confidentialité, la sécurité et l’activité.`;
-    if (lang === 'tr') return `${name} hesabını silmek veya yönetmek, verileri dışa aktarmak ve gizlilik, güvenlik ya da etkinlik ayarlarını açmak için resmi bağlantılar.`;
+    if (lang === 'tr') return `${name} hesabını silmek veya yönetmek, verileri dışa aktarmak ve gizlilik, güvenlik ya da etkinlik ayarlarını açmak için resmî bağlantılar.`;
     return `Official links to delete or manage your ${name} account, export data, and review privacy, security or activity controls.`;
 }
 
@@ -221,10 +239,11 @@ function renderServicePage(platform, lang) {
     const verified = latestVerified(platform);
     const difficulty = difficultyFor(platform);
     const resources = platform.resources || [];
-    const note = lang === 'en' && platform.note ? `<p class="note">${escapeHtml(platform.note)}</p>` : '';
+    const localizedNote = noteFor(platform, lang);
+    const note = localizedNote ? `<p class="note">${escapeHtml(localizedNote)}</p>` : '';
     const jsonLd = serviceJsonLd(platform, lang, canonical);
     const resourceCards = resources.map(resource => {
-        const warning = resource.destructiveScope ? `<span class="scope-warning">${escapeHtml(cfg.entireAccount)}: ${escapeHtml(resource.destructiveScope.replaceAll('-', ' '))}</span>` : '';
+        const warning = resource.destructiveScope ? `<span class="scope-warning">${escapeHtml(cfg.entireAccount)}: ${escapeHtml(scopeFor(resource.destructiveScope, lang))}</span>` : '';
         return `<li class="resource-card">
             <a href="${escapeHtml(resource.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(resourceTitleFor(resource, lang))}</a>
             <div class="resource-meta">
@@ -244,7 +263,7 @@ function renderServicePage(platform, lang) {
 <body>
 <header class="site-header"><div class="container"><a class="brand" href="${BASE_URL}">${escapeHtml(cfg.site)}</a><div class="header-links"><a href="${BASE_URL}${lang}/services/">${escapeHtml(cfg.back)}</a><a href="${BASE_URL}">${escapeHtml(cfg.home)}</a></div></div></header>
 <main class="container">
-    <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="${BASE_URL}">${escapeHtml(cfg.home)}</a> / <a href="${BASE_URL}${lang}/services/">${escapeHtml(cfg.back)}</a> / <span>${escapeHtml(name)}</span></nav>
+    <nav class="breadcrumbs" aria-label="${escapeHtml(cfg.breadcrumbLabel)}"><a href="${BASE_URL}">${escapeHtml(cfg.home)}</a> / <a href="${BASE_URL}${lang}/services/">${escapeHtml(cfg.back)}</a> / <span>${escapeHtml(name)}</span></nav>
     <p class="eyebrow">${escapeHtml(cfg.eyebrow)}</p>
     <h1>${escapeHtml(pageTitle(platform, lang).replace(/\s*\|.*$/, ''))}</h1>
     <p class="lead">${escapeHtml(cfg.intro(name))}</p>
@@ -258,7 +277,7 @@ function renderServicePage(platform, lang) {
     <section aria-labelledby="official-actions"><h2 id="official-actions">${escapeHtml(cfg.officialActions)}</h2><ul class="resource-list">${resourceCards}</ul></section>
     <section aria-labelledby="before-delete"><h2 id="before-delete">${escapeHtml(cfg.beforeTitle)}</h2><ul class="checklist">${cfg.before.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul></section>
     <section aria-labelledby="related-guides"><h2 id="related-guides">${escapeHtml(cfg.relatedTitle)}</h2><div class="related-grid">${relatedLinks(platform, lang)}</div></section>
-    <section aria-labelledby="language-options"><h2 id="language-options">${escapeHtml(cfg.language)}</h2><div class="language-links">${languageLinks(platform)}</div></section>
+    <section aria-labelledby="language-options"><h2 id="language-options">${escapeHtml(cfg.language)}</h2><div class="language-links" aria-label="${escapeHtml(cfg.languagesLabel)}">${languageLinks(platform)}</div></section>
 </main>
 <footer><div class="container">© 2026 imedkablavi · <a href="https://github.com/imedkablavi/Social-Media-Deletion-Guide">GitHub</a></div></footer>
 </body>
@@ -290,7 +309,7 @@ function renderServiceIndex(lang) {
         const name = nameFor(platform, lang);
         return `<a href="${canonical}${slugFor(platform)}/"><strong>${escapeHtml(name)}</strong><small>${escapeHtml(categoryFor(platform, lang))} · ${escapeHtml(cfg[difficultyFor(platform)] || cfg.unknown)}</small></a>`;
     }).join('');
-    const langSwitch = Object.entries(LANGS).map(([code, item]) => `<a hreflang="${code}" href="${BASE_URL}${code}/services/">${escapeHtml(item.name)}</a>`).join('');
+    const langSwitch = Object.entries(LANGS).map(([code, item]) => `<a hreflang="${code}" lang="${code}" href="${BASE_URL}${code}/services/">${escapeHtml(item.name)}</a>`).join('');
     return `<!doctype html>
 <html lang="${lang}" dir="${cfg.dir}">
 <head>${commonHead({ lang, title: cfg.indexTitle, description: cfg.indexDescription, canonical, alternates: alternateLinks(), jsonLd: serviceIndexJsonLd(lang) })}
@@ -301,10 +320,10 @@ function renderServiceIndex(lang) {
     <p class="eyebrow">${escapeHtml(cfg.eyebrow)}</p>
     <h1>${escapeHtml(cfg.indexTitle.replace(/\s*\|.*$/, ''))}</h1>
     <p class="lead">${escapeHtml(cfg.indexLead)}</p>
-    <div class="language-links" aria-label="Languages">${langSwitch}</div>
+    <div class="language-links" aria-label="${escapeHtml(cfg.languagesLabel)}">${langSwitch}</div>
     <div class="service-index">${cards}</div>
 </main>
-<footer><div class="container">${platforms.length} services · <a href="https://github.com/imedkablavi/Social-Media-Deletion-Guide">GitHub</a></div></footer>
+<footer><div class="container">${platforms.length} ${escapeHtml(cfg.servicesLabel)} · <a href="https://github.com/imedkablavi/Social-Media-Deletion-Guide">GitHub</a></div></footer>
 </body>
 </html>`;
 }
@@ -324,11 +343,11 @@ function enrichHomepage() {
     }
     const bodyMarker = '<!-- build:service-guides -->';
     if (!html.includes(bodyMarker)) {
-        const links = Object.entries(LANGS).map(([lang, cfg]) => `<a href="${lang}/services/" hreflang="${lang}">${escapeHtml(cfg.name)}</a>`).join(' · ');
+        const links = Object.entries(LANGS).map(([lang, cfg]) => `<a href="${lang}/services/" hreflang="${lang}" lang="${lang}">${escapeHtml(cfg.name)}</a>`).join(' · ');
         const block = `${bodyMarker}
             <section class="editorial-content" aria-labelledby="service-guide-index">
-                <h2 id="service-guide-index">Individual account deletion guides</h2>
-                <p>Browse crawlable service-specific pages with official links, deletion difficulty and verification metadata. Available in ${links}.</p>
+                <h2 id="service-guide-index" data-key="serviceGuidesTitle">Individual account deletion guides</h2>
+                <p><span data-key="serviceGuidesLead">Browse crawlable service-specific pages with official links, deletion difficulty and verification metadata. Available in:</span> ${links}</p>
             </section>`;
         html = html.replace('</main>', `${block}\n        </main>`);
     }

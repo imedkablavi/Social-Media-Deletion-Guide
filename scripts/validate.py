@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
-"""Dependency-free release validation for the static directory."""
+"""Dependency-free release validation for source and generated production pages."""
 from __future__ import annotations
 
 from html.parser import HTMLParser
 from pathlib import Path
 import json
 import re
+import struct
 import subprocess
 import sys
 import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
+DIST = ROOT / "dist"
 INDEX = ROOT / "index.html"
 CANONICAL = "https://imedkablavi.github.io/Social-Media-Deletion-Guide/"
+LANGUAGES = ("en", "ar", "fr", "tr")
 
 
 class DocumentAudit(HTMLParser):
@@ -53,6 +56,15 @@ class DocumentAudit(HTMLParser):
 def fail(message: str) -> None:
     print(f"ERROR: {message}", file=sys.stderr)
     raise SystemExit(1)
+
+
+def parse_sitemap(path: Path) -> list[str]:
+    try:
+        tree = ET.parse(path)
+    except ET.ParseError as exc:
+        fail(f"invalid sitemap {path}: {exc}")
+    ns = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+    return [node.text or "" for node in tree.findall(".//sm:loc", ns)]
 
 
 def audit_html() -> None:
@@ -119,11 +131,8 @@ def audit_catalog() -> None:
         fail("missing js/brand-icons.js")
 
     result = subprocess.run(
-        ["node", str(ROOT / "scripts/export-effective-urls.js")],
-        cwd=ROOT,
-        text=True,
-        capture_output=True,
-        check=False,
+        ["node", str(ROOT / "scripts/export-effective-urls.js")], cwd=ROOT,
+        text=True, capture_output=True, check=False,
     )
     if result.returncode != 0:
         fail(f"effective catalog export failed: {result.stderr.strip()}")
@@ -146,31 +155,118 @@ def audit_catalog() -> None:
         fail(f"known stale URLs remain in effective catalog: {', '.join(found)}")
 
 
-def audit_discovery_files() -> None:
+def audit_source_discovery_files() -> None:
     robots = ROOT / "robots.txt"
     sitemap = ROOT / "sitemap.xml"
     if not robots.exists() or not sitemap.exists():
-        fail("robots.txt and sitemap.xml are required")
+        fail("source robots.txt and sitemap.xml fallbacks are required")
+    if f"Sitemap: {CANONICAL}sitemap.xml" not in robots.read_text(encoding="utf-8"):
+        fail("source robots.txt does not advertise the canonical sitemap")
+    if CANONICAL not in parse_sitemap(sitemap):
+        fail("source sitemap.xml does not include the canonical homepage")
 
-    robots_text = robots.read_text(encoding="utf-8")
-    if f"Sitemap: {CANONICAL}sitemap.xml" not in robots_text:
-        fail("robots.txt does not advertise the canonical sitemap")
 
+def png_dimensions(path: Path) -> tuple[int, int]:
+    data = path.read_bytes()[:24]
+    if len(data) < 24 or data[:8] != b"\x89PNG\r\n\x1a\n":
+        fail(f"{path} is not a valid PNG")
+    return struct.unpack(">II", data[16:24])
+
+
+def audit_generated_site() -> None:
+    if not DIST.exists():
+        fail("dist/ is missing; run npm run build before static validation")
+
+    report_path = DIST / "build-report.json"
+    if not report_path.exists():
+        fail("generated build-report.json is missing")
+    report = json.loads(report_path.read_text(encoding="utf-8"))
+    if report.get("services", 0) < 50:
+        fail(f"production build contains only {report.get('services')} services")
+    if report.get("languages") != 4:
+        fail("production build must contain exactly four language variants")
+    if report.get("servicePages", 0) < 200:
+        fail(f"expected at least 200 localized service pages, got {report.get('servicePages')}")
+
+    home = (DIST / "index.html").read_text(encoding="utf-8")
+    for required in ("build:seo-head", "build:service-guides", "assets/social-preview.png", "assets/favicon.svg", "site.webmanifest"):
+        if required not in home:
+            fail(f"production homepage missing generated SEO marker/asset: {required}")
+    for lang in LANGUAGES:
+        if f'href="{lang}/services/"' not in home:
+            fail(f"production homepage does not link to {lang} service index")
+
+    social = DIST / "assets/social-preview.png"
+    if not social.exists():
+        fail("1200x630 social preview image is missing")
+    if png_dimensions(social) != (1200, 630):
+        fail(f"social preview must be 1200x630, got {png_dimensions(social)}")
+
+    manifest = DIST / "site.webmanifest"
+    if not manifest.exists():
+        fail("site.webmanifest is missing from production build")
     try:
-        tree = ET.parse(sitemap)
-    except ET.ParseError as exc:
-        fail(f"invalid sitemap.xml: {exc}")
-    ns = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
-    locations = [node.text for node in tree.findall(".//sm:loc", ns)]
+        json.loads(manifest.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        fail(f"invalid site.webmanifest: {exc}")
+
+    robots = DIST / "robots.txt"
+    sitemap = DIST / "sitemap.xml"
+    if not robots.exists() or not sitemap.exists():
+        fail("generated robots.txt and sitemap.xml are required")
+    if f"Sitemap: {CANONICAL}sitemap.xml" not in robots.read_text(encoding="utf-8"):
+        fail("generated robots.txt does not advertise the canonical sitemap")
+
+    locations = parse_sitemap(sitemap)
+    if len(locations) < 205:
+        fail(f"generated sitemap contains only {len(locations)} URLs")
+    if len(locations) != len(set(locations)):
+        fail("generated sitemap contains duplicate URLs")
     if CANONICAL not in locations:
-        fail("sitemap.xml does not include the canonical page")
+        fail("generated sitemap is missing the homepage")
+    for lang in LANGUAGES:
+        index_url = f"{CANONICAL}{lang}/services/"
+        if index_url not in locations:
+            fail(f"generated sitemap missing language service index: {index_url}")
+
+    samples = {
+        "en/services/openai/index.html": f"{CANONICAL}en/services/openai/",
+        "ar/services/openai/index.html": f"{CANONICAL}ar/services/openai/",
+        "tr/services/instagram/index.html": f"{CANONICAL}tr/services/instagram/",
+        "fr/services/google/index.html": f"{CANONICAL}fr/services/google/",
+    }
+    for relative, canonical in samples.items():
+        page_path = DIST / relative
+        if not page_path.exists():
+            fail(f"generated sample service page missing: {relative}")
+        page = page_path.read_text(encoding="utf-8")
+        if f'<link rel="canonical" href="{canonical}">' not in page:
+            fail(f"wrong canonical in {relative}")
+        if '<script src=' in page or '<script defer src=' in page:
+            fail(f"service SEO page unexpectedly depends on JavaScript: {relative}")
+        if 'BreadcrumbList' not in page or 'ItemList' not in page:
+            fail(f"structured data missing from {relative}")
+        if page.count('rel="alternate" hreflang=') < 5:
+            fail(f"hreflang set incomplete in {relative}")
+        ld_blocks = re.findall(r'<script\s+type="application/ld\+json">(.*?)</script>', page, re.S | re.I)
+        if not ld_blocks:
+            fail(f"JSON-LD missing from {relative}")
+        for block in ld_blocks:
+            try:
+                json.loads(block)
+            except json.JSONDecodeError as exc:
+                fail(f"invalid generated JSON-LD in {relative}: {exc}")
+
+    if not (DIST / "404.html").exists() or 'noindex' not in (DIST / "404.html").read_text(encoding="utf-8"):
+        fail("production 404.html must exist and be noindex")
 
 
 def main() -> None:
     audit_html()
     audit_catalog()
-    audit_discovery_files()
-    print("Static validation passed.")
+    audit_source_discovery_files()
+    audit_generated_site()
+    print("Static validation passed for source and generated SEO site.")
 
 
 if __name__ == "__main__":

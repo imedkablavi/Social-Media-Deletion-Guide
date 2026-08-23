@@ -1,4 +1,4 @@
-name: Check external links
+name: Resource freshness and reachability
 
 on:
   pull_request:
@@ -12,60 +12,34 @@ permissions:
   contents: read
 
 concurrency:
-  group: link-check-${{ github.ref }}
+  group: resource-audit-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  links:
-    name: Validate effective directory links
+  resource-audit:
+    name: Classify resource freshness and reachability
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v7
 
-      - name: Build effective URL list
-        run: node scripts/export-effective-urls.js > effective-urls.txt
-
-      # Provider-owned external URLs are checked here. The project's own generated
-      # Pages URLs are deliberately excluded because PRs create new local routes
-      # before those routes exist on the currently deployed main site. Internal
-      # production routes are instead validated from the PR's dist build by
-      # validate-indexing.js and Playwright.
-      #
-      # Some authenticated/provider endpoints intentionally reject non-browser bots.
-      # Exclusions stay exact and narrow; public deletion/help URLs remain checked.
-      # TikTok's two section pages below were browser-verified during final QA but
-      # return a synthetic 404 specifically to Lychee's automated HTTP client.
-      # Amazon's account-deletion endpoint intermittently returns 503 to Lychee
-      # while remaining the provider-owned account/data deletion route.
-      - name: Check links with Lychee
-        uses: lycheeverse/lychee-action@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
         with:
-          args: >-
-            --verbose
-            --no-progress
-            --max-retries 2
-            --timeout 20
-            --accept 200,204,206,301,302,303,307,308,401,403,405,429
-            --exclude '^https://imedkablavi\.github\.io/Social-Media-Deletion-Guide/'
-            --exclude '^https://accounts\.snapchat\.com/'
-            --exclude '^https://accounts\.nintendo\.com/'
-            --exclude '^https://my\.telegram\.org/'
-            --exclude '^https://discord\.com/settings/'
-            --exclude '^https://x\.com/settings/'
-            --exclude '^https://www\.instagram\.com/accounts/remove/'
-            --exclude '^https://accountscenter\.instagram\.com/'
-            --exclude '^https://www\.netflix\.com/account'
-            --exclude '^https://www\.paypal\.com/myaccount/'
-            --exclude '^https://www\.amazon\.com/privacy/data-deletion$'
-            --exclude '^https://www\.amazon\.com/hz/privacy-central/data-requests/preview\.html$'
-            --exclude '^https://support\.tiktok\.com/en/privacy-safety/account-privacy-settings$'
-            --exclude '^https://support\.tiktok\.com/en/safety-hc/account-and-user-safety$'
-            --exclude '^https://myaccount\.ea\.com/'
-            --exclude '^https://account\.battle\.net/'
-            --exclude '^https://id\.atlassian\.com/'
-            --exclude '^https://www\.figma\.com/settings'
-            --exclude '^https://myprivacy\.uber\.com/'
-            effective-urls.txt README.md index.html
-          fail: true
-          jobSummary: true
+          node-version: '22'
+
+      - name: Build effective catalog and production pages
+        run: npm run build
+
+      - name: Audit provider resources
+        env:
+          AUDIT_DATE: ${{ github.event.repository.updated_at }}
+        run: node scripts/audit-resources.js --online --output-dir=reports/resource-audit
+
+      - name: Upload stale-resource and reachability report
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: resource-audit
+          path: reports/resource-audit/
+          if-no-files-found: error

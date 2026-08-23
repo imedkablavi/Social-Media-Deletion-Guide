@@ -1,4 +1,4 @@
-name: Browser user-journey QA
+name: Browser, accessibility and Lighthouse QA
 
 on:
   pull_request:
@@ -25,16 +25,16 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Install Playwright Test
+      - name: Install test dependencies
         run: npm install --no-audit --no-fund
 
-      - name: Install Chromium
+      - name: Install Chromium for Playwright
         run: npx playwright install --with-deps chromium
 
       - name: Build production site
         run: npm run build
 
-      - name: Start production site
+      - name: Start production site for Playwright
         shell: bash
         run: |
           cd dist
@@ -48,8 +48,19 @@ jobs:
           cat /tmp/deletion-guide-http.log
           exit 1
 
-      - name: Run user journeys
+      - name: Run four-language browser and mobile QA
         run: npm run test:e2e
+
+      - name: Run Lighthouse mobile regression gates
+        run: npm run test:lighthouse
+
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: lighthouse-reports
+          path: reports/lighthouse/
+          if-no-files-found: warn
 
       - name: Upload Playwright traces on failure
         if: failure()

@@ -32,8 +32,6 @@ jobs:
         run: npm run build
 
       - name: Audit provider resources
-        env:
-          AUDIT_DATE: ${{ github.event.repository.updated_at }}
         run: node scripts/audit-resources.js --online --output-dir=reports/resource-audit
 
       - name: Upload stale-resource and reachability report

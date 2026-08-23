@@ -13,9 +13,17 @@ function loadCatalog() {
     global.translations = structuredClone(i18n.translations);
 
     require('../js/translations-updates.js');
+    require('../js/trust-copy.js');
+
+    // Snapshot legacy evidence before compatibility overlays add fallback metadata.
+    require('../js/legacy-provenance-snapshot.js');
     require('../js/catalog-updates.js');
     require('../js/ai-catalog.js');
     require('../js/catalog-maintenance.js');
+    require('../js/growth-trust-catalog.js');
+
+    // Normalize trust metadata only after every URL replacement/addition is final.
+    require('../js/trust-metadata.js');
     require('../js/localization-integrity.js');
 
     return {

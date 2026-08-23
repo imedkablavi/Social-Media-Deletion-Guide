@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "note": "These entries classify expected automation behavior only. They do not assert that a URL is currently live or manually verified.",
+  "entries": [
+    { "pattern": "^https://accounts\\.snapchat\\.com/", "expected": "auth-required", "reason": "Account portal." },
+    { "pattern": "^https://accounts\\.nintendo\\.com/", "expected": "auth-required", "reason": "Account portal." },
+    { "pattern": "^https://my\\.telegram\\.org/", "expected": "auth-required", "reason": "Telegram account-management portal requires account confirmation." },
+    { "pattern": "^https://discord\\.com/settings/", "expected": "auth-required", "reason": "Account settings route." },
+    { "pattern": "^https://x\\.com/settings/", "expected": "auth-required", "reason": "Account settings route." },
+    { "pattern": "^https://www\\.instagram\\.com/accounts/remove/", "expected": "auth-required", "reason": "Account action route." },
+    { "pattern": "^https://accountscenter\\.instagram\\.com/", "expected": "auth-required", "reason": "Accounts Center route." },
+    { "pattern": "^https://www\\.netflix\\.com/account", "expected": "auth-required", "reason": "Account route." },
+    { "pattern": "^https://www\\.paypal\\.com/myaccount/", "expected": "auth-required", "reason": "Account route." },
+    { "pattern": "^https://www\\.amazon\\.com/privacy/data-deletion$", "expected": "auth-required", "reason": "Account privacy action." },
+    { "pattern": "^https://www\\.amazon\\.com/hz/privacy-central/data-requests/preview\\.html$", "expected": "auth-required", "reason": "Account privacy request route." },
+    { "pattern": "^https://support\\.tiktok\\.com/en/privacy-safety/account-privacy-settings$", "expected": "bot-blocked", "reason": "Existing repository QA records a synthetic automated-client response for this public support route; manual/browser review remains required." },
+    { "pattern": "^https://support\\.tiktok\\.com/en/safety-hc/account-and-user-safety$", "expected": "bot-blocked", "reason": "Existing repository QA records a synthetic automated-client response for this public support route; manual/browser review remains required." },
+    { "pattern": "^https://myaccount\\.ea\\.com/", "expected": "auth-required", "reason": "Account route." },
+    { "pattern": "^https://account\\.battle\\.net/", "expected": "auth-required", "reason": "Account route." },
+    { "pattern": "^https://id\\.atlassian\\.com/", "expected": "auth-required", "reason": "Account route." },
+    { "pattern": "^https://www\\.figma\\.com/settings", "expected": "auth-required", "reason": "Account settings route." },
+    { "pattern": "^https://myprivacy\\.uber\\.com/", "expected": "auth-required", "reason": "Privacy account portal." }
+  ]
+}

@@ -1,14 +1,17 @@
 {
   "name": "social-media-deletion-guide",
-  "version": "3.2.1",
+  "version": "3.3.0",
   "private": true,
   "scripts": {
-    "build": "node scripts/build-site.js",
+    "build": "node scripts/build-site.js && node scripts/postbuild-trust.js",
     "test:e2e": "playwright test",
-    "test:static": "python3 scripts/validate.py"
+    "test:static": "python3 scripts/validate.py",
+    "test:trust": "node scripts/audit-resources.js --output-dir=reports/resource-audit",
+    "test:lighthouse": "lhci autorun"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.13.0",
+    "@lhci/cli": "0.15.1",
     "@playwright/test": "1.62.1"
   }
 }

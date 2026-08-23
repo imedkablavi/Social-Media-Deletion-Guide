@@ -10,6 +10,7 @@ const BATCH2_GUIDES = ['facebook', 'whatsapp', 'discord', 'telegram', 'microsoft
 const BATCH2_TOPICS = ['delete-gaming-accounts', 'cancel-subscriptions-before-deleting', 'protect-cloud-data-before-deletion', 'account-deletion-grace-periods'];
 const BATCH3_GUIDES = ['twitter', 'linkedin', 'paypal', 'netflix', 'dropbox', 'adobe', 'slack', 'zoom', 'pinterest', 'ebay'];
 const BATCH3_TOPICS = ['deactivate-vs-delete-social-accounts', 'delete-work-and-cloud-accounts', 'delete-payment-and-marketplace-accounts', 'cancel-streaming-before-deleting'];
+const INTENT_EXPANSION = ['discord', 'telegram', 'github'];
 const SEARCH_INTENTS = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'search-intents.json'), 'utf8'));
 
 const ROOT = path.resolve(__dirname, '..');
@@ -32,16 +33,33 @@ const report = JSON.parse(read('build-report.json'));
 if (report.curatedGuides < 26) fail(`expected at least 26 curated guides, got ${report.curatedGuides}`);
 if (report.topicPages !== Object.keys(TOPIC_PAGES).length * LANGS.length) fail(`unexpected topic page count: ${report.topicPages}`);
 if (report.topicIndexes !== LANGS.length) fail(`unexpected topic index count: ${report.topicIndexes}`);
-if (report.sitemapUrls < 305) fail(`sitemap should contain batch 3 growth hubs; got only ${report.sitemapUrls} URLs`);
+if (report.sitemapUrls < 305) fail(`sitemap should contain growth hubs; got only ${report.sitemapUrls} URLs`);
 for (const id of BATCH2_GUIDES) if (!GUIDE_CONTENT[id]) fail(`missing batch 2 guide: ${id}`);
 for (const slug of BATCH2_TOPICS) if (!TOPIC_PAGES[slug]) fail(`missing batch 2 topic: ${slug}`);
 for (const id of BATCH3_GUIDES) if (!GUIDE_CONTENT[id]) fail(`missing batch 3 guide: ${id}`);
 for (const slug of BATCH3_TOPICS) if (!TOPIC_PAGES[slug]) fail(`missing batch 3 topic: ${slug}`);
-if (!Array.isArray(SEARCH_INTENTS.targets) || SEARCH_INTENTS.targets.length !== BATCH3_GUIDES.length) fail('search-intents.json must describe every batch 3 service');
+
+const expectedIntentIds = [...BATCH3_GUIDES, ...INTENT_EXPANSION];
+if (!Array.isArray(SEARCH_INTENTS.targets) || SEARCH_INTENTS.targets.length !== expectedIntentIds.length) {
+  fail(`search-intents.json must contain exactly ${expectedIntentIds.length} distinct reviewed service targets`);
+}
 const intentIds = new Set(SEARCH_INTENTS.targets.map(item => item.service));
-for (const id of BATCH3_GUIDES) if (!intentIds.has(id)) fail(`search-intents.json missing batch 3 service ${id}`);
+if (intentIds.size !== SEARCH_INTENTS.targets.length) fail('search-intents.json contains duplicate service targets');
+for (const id of expectedIntentIds) if (!intentIds.has(id)) fail(`search-intents.json missing reviewed service ${id}`);
+const seenQueries = new Set();
 for (const item of SEARCH_INTENTS.targets) {
-  if (!item.query || !/^https:\/\//.test(item.officialSource || '')) fail(`invalid search intent record for ${item.service}`);
+  if (!item.query || !item.preferredTitleTerm || !/^https:\/\//.test(item.officialSource || '')) fail(`invalid search intent record for ${item.service}`);
+  const query = item.query.trim().toLowerCase();
+  if (seenQueries.has(query)) fail(`duplicate search intent query: ${item.query}`);
+  seenQueries.add(query);
+  if (item.providerEvidence && !/^https:\/\//.test(item.providerEvidence)) fail(`invalid provider evidence URL for ${item.service}`);
+
+  const html = read(`en/services/${item.service}/index.html`);
+  const canonical = `${BASE}en/services/${item.service}/`;
+  if (!html.includes(`<link rel="canonical" href="${canonical}">`)) fail(`search intent target has wrong canonical: ${item.service}`);
+  if (!new RegExp(`<title>[^<]*${item.service}`, 'i').test(html) && !new RegExp(`<h1[^>]*>[^<]*${item.service}`, 'i').test(html)) {
+    fail(`search intent landing page does not identify service ${item.service}`);
+  }
 }
 
 for (const [serviceId, guide] of Object.entries(GUIDE_CONTENT)) {
@@ -90,6 +108,9 @@ for (const lang of LANGS) {
   for (const slug of Object.keys(TOPIC_PAGES)) {
     if (!sitemap.includes(`<loc>${BASE}${lang}/topics/${slug}/</loc>`)) fail(`sitemap missing ${lang}/${slug}`);
   }
+  for (const id of INTENT_EXPANSION) {
+    if (!sitemap.includes(`<loc>${BASE}${lang}/services/${id}/</loc>`)) fail(`sitemap missing expanded search-intent service ${lang}/${id}`);
+  }
 }
 
 const arOpenAI = read('ar/services/openai/index.html');
@@ -112,4 +133,4 @@ for (const id of ['linkedin', 'slack', 'zoom', 'adobe', 'dropbox', 'github', 'mi
 const paymentsHub = read('en/topics/delete-payment-and-marketplace-accounts/index.html');
 for (const id of ['paypal', 'ebay', 'amazon']) if (!paymentsHub.includes(`/en/services/${id}/`)) fail(`payments topic missing ${id}`);
 
-console.log(`Growth validation passed: ${report.curatedGuides} curated guides, ${report.topicPages} topic pages, ${report.sitemapUrls} sitemap URLs.`);
+console.log(`Growth validation passed: ${report.curatedGuides} curated guides, ${SEARCH_INTENTS.targets.length} evidence-backed search-intent service pages, ${report.topicPages} topic pages, ${report.sitemapUrls} sitemap URLs.`);

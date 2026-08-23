@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "freshDays": 90,
+  "reviewDueDays": 180,
+  "verifiedMeaning": "Date on which a maintainer manually reviewed the exact effective resource URL and its action label. Automated HTTP checks never set or refresh this date.",
+  "serviceStatus": {
+    "fresh": "Every dated resource is at most freshDays old and no resource lacks review metadata.",
+    "review-due": "At least one dated resource is older than freshDays but not older than reviewDueDays.",
+    "stale": "At least one dated resource is older than reviewDueDays.",
+    "unverified": "At least one resource has no evidence-backed review date. This status makes no claim that the URL is dead."
+  }
+}

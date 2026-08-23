@@ -1,0 +1,103 @@
+name: Service link update or verification
+description: Propose a new provider resource, replacement URL, or freshness review with evidence.
+title: "[Service link]: "
+labels: ["broken-link"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use provider-owned sources first. Do not submit guessed deletion URLs. A successful HTTP response alone is not enough to mark a resource manually verified.
+
+  - type: input
+    id: service
+    attributes:
+      label: Service
+      placeholder: "Example: Discord"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: action
+    attributes:
+      label: Resource action
+      options:
+        - Permanent account deletion
+        - Reversible deactivation
+        - Data export / portability
+        - Privacy controls / request
+        - Security / account recovery
+        - Activity or history deletion
+        - Account settings / management
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: current-url
+    attributes:
+      label: Current guide URL (if replacing one)
+      placeholder: "https://... or none"
+
+  - type: input
+    id: candidate-url
+    attributes:
+      label: Candidate provider URL
+      description: Use the exact URL you personally reviewed. Do not infer a path from another service.
+      placeholder: "https://provider.example/..."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: provenance
+    attributes:
+      label: Why is this first-party?
+      options:
+        - Provider help/support center
+        - Provider account/settings portal
+        - Provider privacy/legal portal
+        - Provider-owned product documentation
+        - I cannot confirm first-party provenance
+    validations:
+      required: true
+
+  - type: input
+    id: reviewed-date
+    attributes:
+      label: Manual review date
+      description: YYYY-MM-DD. This should mean you reviewed the exact effective URL and confirmed the action label.
+      placeholder: "2026-08-24"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: access
+    attributes:
+      label: Access behavior
+      options:
+        - Public page
+        - Sign-in/authentication required
+        - Public page but automated clients are blocked or rate-limited
+        - Unknown
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: What did you verify?
+      description: Describe the page heading/action, redirects, waiting period, region differences, or destructive scope. Do not include credentials or personal account data.
+      placeholder: "The provider page says..."
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmation
+      options:
+        - label: I did not guess or construct this deletion URL.
+          required: true
+        - label: I checked that account deletion is not merely subscription cancellation or activity deletion.
+          required: true
+        - label: I have not included credentials, tokens, private screenshots, or personal account data.
+          required: true

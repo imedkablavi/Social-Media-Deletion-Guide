@@ -40,10 +40,13 @@ jobs:
       - name: Validate curated growth pages and topic hubs
         run: node scripts/validate-growth.js
 
-      - name: Validate Search Console indexing readiness
+      - name: Validate canonical, reciprocal hreflang, schema and sitemap
         env:
           GOOGLE_SITE_VERIFICATION: ci-search-console-verification-token-20260822
         run: node scripts/validate-indexing.js
+
+      - name: Validate evidence-backed trust metadata
+        run: node scripts/audit-resources.js --strict-metadata --output-dir=reports/resource-audit
 
       - name: Build effective user-visible URL list
         run: |
@@ -54,7 +57,15 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for file in js/*.js scripts/*.js playwright.config.js tests/*.js; do
+          for file in js/*.js scripts/*.js playwright.config.js tests/*.js lighthouserc.cjs; do
             echo "Checking $file"
             node --check "$file"
           done
+
+      - name: Upload trust metadata report
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: trust-metadata-report
+          path: reports/resource-audit/
+          if-no-files-found: warn

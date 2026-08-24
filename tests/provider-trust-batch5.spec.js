@@ -89,15 +89,26 @@ test('batch 5 removes stale or semantically wrong provider routes', async ({ pag
   expect(whatsappPrivacy.title).toContain('privacy settings');
 });
 
-test('batch 5 keeps blocked or unaudited scopes unverified', async ({ page }) => {
+test('batch 5 keeps blocked or unaudited scopes unverified unless a later review has evidence', async ({ page }) => {
   const snapshot = await catalogSnapshot(page, ['facebook', 'amazon']);
 
   const facebookSecondaries = snapshot.facebook.resources.filter(resource => resource.type !== 'delete');
   expect(facebookSecondaries.length).toBeGreaterThan(0);
   for (const resource of facebookSecondaries) {
-    expect(resource.verified).toBeNull();
-    expect(resource.provenance).toBe('unverified');
+    if (resource.verified) {
+      expect(resource.verified).toBe('2026-08-24');
+      expect(resource.official).toBe(true);
+      expect(resource.evidenceSource).toBeTruthy();
+      expect(resource.provenance).toBe('provider-reviewed');
+    } else {
+      expect(resource.provenance).toBe('unverified');
+    }
   }
+
+  const facebookBackup = snapshot.facebook.resources.find(resource => resource.url === 'https://www.facebook.com/dyi');
+  expect(facebookBackup).toBeTruthy();
+  expect(facebookBackup.verified).toBeNull();
+  expect(facebookBackup.provenance).toBe('unverified');
 
   const amazonDelete = snapshot.amazon.resources.find(resource => resource.type === 'delete');
   const amazonBackup = snapshot.amazon.resources.find(resource => resource.type === 'backup');

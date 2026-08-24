@@ -57,8 +57,8 @@ test('Turkish legacy resource titles are real translations, not English fallback
 
   await page.locator('.platform-card').filter({ hasText: 'Facebook' }).first().click();
   const titles = page.locator('.resource-title');
-  await expect(titles.filter({ hasText: 'Facebook hesabını kalıcı olarak sil' })).toBeVisible();
-  await expect(titles.filter({ hasText: 'How to permanently delete Facebook account' })).toHaveCount(0);
+  await expect(titles.filter({ hasText: 'Facebook hesabınızı kalıcı olarak silin' })).toBeVisible();
+  await expect(titles.filter({ hasText: 'Permanently delete your Facebook account' })).toHaveCount(0);
   await expect(page.locator('.supported-services')).toContainText('ve daha fazlası');
 });
 
@@ -72,8 +72,8 @@ test('generated localized SEO pages preserve language-specific content', async (
 
   await page.goto('/tr/services/facebook/');
   await expect(page.locator('html')).toHaveAttribute('lang', 'tr');
-  await expect(page.locator('.resource-card').filter({ hasText: 'Facebook hesabını kalıcı olarak sil' })).toHaveCount(1);
-  await expect(page.locator('body')).not.toContainText('How to permanently delete Facebook account');
+  await expect(page.locator('.resource-card').filter({ hasText: 'Facebook hesabınızı kalıcı olarak silin' })).toHaveCount(1);
+  await expect(page.locator('body')).not.toContainText('Permanently delete your Facebook account');
 
   await page.goto('/fr/services/');
   await expect(page.locator('.language-links')).toHaveAttribute('aria-label', 'Langues');

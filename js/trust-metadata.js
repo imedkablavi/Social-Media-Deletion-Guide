@@ -25,6 +25,10 @@
             verified: VERIFIED,
             evidenceSource
         });
+        // This exact URL now has explicit review evidence, so legacy absence markers
+        // no longer describe its current maintained trust state.
+        try { delete resource.__verifiedWasMissing; } catch (_) {}
+        try { delete resource.__officialWasMissing; } catch (_) {}
     }
 
     // Google: full-account deletion and YouTube channel deletion are different scopes.

@@ -21,6 +21,7 @@ function loadCatalog() {
     require('../js/ai-catalog.js');
     require('../js/catalog-maintenance.js');
     require('../js/growth-trust-catalog.js');
+    require('../js/provider-verification-batch2.js');
 
     // Normalize trust metadata only after every URL replacement/addition is final.
     require('../js/trust-metadata.js');

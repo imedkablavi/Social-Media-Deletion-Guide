@@ -23,8 +23,9 @@ function loadCatalog() {
     require('../js/growth-trust-catalog.js');
     require('../js/provider-verification-batch2.js');
 
-    // Normalize trust metadata only after every URL replacement/addition is final.
+    // Normalize legacy trust metadata, then apply later explicit evidence reviews.
     require('../js/trust-metadata.js');
+    require('../js/provider-verification-batch7.js');
     require('../js/localization-integrity.js');
 
     return {

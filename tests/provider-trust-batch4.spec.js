@@ -42,7 +42,7 @@ test('provider review batch 4 exposes only evidence-backed deletion resources', 
   // Scope regressions that would be materially misleading to users.
   expect(snapshot.steam.note).toContain('30 days');
   expect(snapshot.stackoverflow.note).toContain('anonymized');
-  expect(snapshot.protonmail.note).toContain('all Proton services');
+  expect(snapshot.protonmail.note).toContain('Proton Mail, Calendar, VPN, Pass, Drive and other Proton services');
   expect(snapshot.yahoo.note).toContain('region-dependent');
 });
 

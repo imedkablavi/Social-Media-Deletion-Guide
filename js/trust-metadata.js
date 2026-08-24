@@ -1,34 +1,55 @@
 /**
- * Final evidence-backed trust review layer.
+ * Final evidence-backed trust review and normalization layer.
  *
- * Batch 5 runs after catalog maintenance so URL corrections, provider evidence and
- * trust normalization all apply to the exact resources used by the browser, build
- * and automated audits. Only resources manually reviewed on 2026-08-24 receive a
- * new `verified` date; automated reachability never writes review metadata.
+ * `verified` means the exact effective URL was manually reviewed on that date.
+ * Automated reachability never writes review metadata. Every explicit review below
+ * clears legacy absence markers, then one final normalization pass derives
+ * `provenance` and `freshness` consistently for the whole catalog.
  */
 (() => {
     const VERIFIED = '2026-08-24';
+    const LEGACY_DEFAULT_DATE = '2026-08-21';
     const byId = id => platforms.find(platform => platform.id === id);
     const title = (en, ar, fr, tr) => ({ en, ar, fr, tr });
 
-    function replaceExact(platform, currentUrl, replacement) {
-        if (!platform) return;
-        const index = (platform.resources || []).findIndex(resource => resource.url === currentUrl);
-        if (index >= 0) platform.resources[index] = replacement;
+    function clearLegacyMarkers(resource) {
+        try { delete resource.__verifiedWasMissing; } catch (_) {}
+        try { delete resource.__officialWasMissing; } catch (_) {}
     }
 
-    function reviewExact(platform, url, evidenceSource, patch = {}) {
-        const resource = (platform?.resources || []).find(item => item.url === url);
-        if (!resource) return;
+    function reviewed(resource, evidenceSource = 'provider-support') {
+        const next = {
+            ...resource,
+            official: true,
+            verified: VERIFIED,
+            evidenceSource
+        };
+        clearLegacyMarkers(next);
+        return next;
+    }
+
+    function reviewExact(platform, url, evidenceSource = 'provider-support', patch = {}) {
+        if (!platform) return;
+        const index = (platform.resources || []).findIndex(resource => resource.url === url);
+        if (index < 0) return;
+        const resource = platform.resources[index];
         Object.assign(resource, patch, {
             official: true,
             verified: VERIFIED,
             evidenceSource
         });
-        try { delete resource.__verifiedWasMissing; } catch (_) {}
-        try { delete resource.__officialWasMissing; } catch (_) {}
+        clearLegacyMarkers(resource);
     }
 
+    function replaceExact(platform, currentUrl, replacement, evidenceSource = 'provider-support') {
+        if (!platform) return;
+        const index = (platform.resources || []).findIndex(resource => resource.url === currentUrl);
+        if (index >= 0) platform.resources[index] = reviewed(replacement, evidenceSource);
+    }
+
+    // -------------------------------------------------------------------------
+    // Provider review batch 5: high-impact privacy/security/export resources.
+    // -------------------------------------------------------------------------
     const google = byId('google');
     if (google) {
         google.loginRequired = true;
@@ -50,8 +71,7 @@
         replaceExact(google, 'https://support.google.com/youtube/answer/55770', {
             url: 'https://support.google.com/youtube/answer/55759',
             title: title('Delete or hide your YouTube channel', 'حذف قناة YouTube أو إخفاؤها', 'Supprimer ou masquer votre chaîne YouTube', 'YouTube kanalınızı silin veya gizleyin'),
-            type: 'delete', official: true, verified: VERIFIED,
-            evidenceSource: 'provider-support'
+            type: 'delete'
         });
     }
 
@@ -70,14 +90,12 @@
         replaceExact(whatsapp, 'https://faq.whatsapp.com/1061611991749160', {
             url: 'https://faq.whatsapp.com/1131652977717250',
             title: title('Recover a compromised WhatsApp account', 'استرداد حساب WhatsApp مخترق', 'Récupérer un compte WhatsApp compromis', 'Ele geçirilmiş WhatsApp hesabını kurtarın'),
-            type: 'security', official: true, verified: VERIFIED,
-            evidenceSource: 'provider-support'
+            type: 'security'
         });
         replaceExact(whatsapp, 'https://faq.whatsapp.com/539178204879377', {
             url: 'https://faq.whatsapp.com/3307102709559968',
             title: title('Change your WhatsApp privacy settings', 'تغيير إعدادات خصوصية WhatsApp', 'Modifier vos réglages de confidentialité WhatsApp', 'WhatsApp gizlilik ayarlarınızı değiştirin'),
-            type: 'settings', official: true, verified: VERIFIED,
-            evidenceSource: 'provider-support'
+            type: 'settings'
         });
     }
 
@@ -93,21 +111,18 @@
         replaceExact(snapchat, 'https://support.snapchat.com/en-US/a/download-my-data', {
             url: 'https://help.snapchat.com/hc/en-us/articles/7012305371156-How-do-I-download-my-data-from-Snapchat',
             title: title('Download your data from Snapchat', 'تنزيل بياناتك من Snapchat', 'Télécharger vos données depuis Snapchat', 'Snapchat verilerinizi indirin'),
-            type: 'backup', official: true, verified: VERIFIED,
-            evidenceSource: 'provider-support'
+            type: 'backup'
         });
         replaceExact(snapchat, 'https://support.snapchat.com/en-US/a/hacked-howto', {
             url: 'https://help.snapchat.com/hc/en-us/articles/7012305621908-My-account-is-compromised',
             title: title('Recover a compromised Snapchat account', 'استرداد حساب Snapchat مخترق', 'Récupérer un compte Snapchat compromis', 'Ele geçirilmiş Snapchat hesabını kurtarın'),
-            type: 'security', official: true, verified: VERIFIED,
-            evidenceSource: 'provider-support'
+            type: 'security'
         });
         replaceExact(snapchat, 'https://accounts.snapchat.com/accounts/login', {
             url: 'https://accounts.snapchat.com/',
             title: title('Open the Snapchat account portal', 'فتح بوابة حساب Snapchat', 'Ouvrir le portail de compte Snapchat', 'Snapchat hesap portalını açın'),
-            type: 'settings', official: true, verified: VERIFIED,
-            evidenceSource: 'provider-account-action'
-        });
+            type: 'settings'
+        }, 'provider-account-action');
     }
 
     const tiktok = byId('tiktok');
@@ -125,8 +140,7 @@
         replaceExact(tiktok, 'https://support.tiktok.com/en/safety-hc/account-and-user-safety', {
             url: 'https://support.tiktok.com/en/safety-hc/account-and-user-safety/account-safety',
             title: title('TikTok account safety and recovery', 'أمان حساب TikTok واسترداده', 'Sécurité et récupération du compte TikTok', 'TikTok hesap güvenliği ve kurtarma'),
-            type: 'security', official: true, verified: VERIFIED,
-            evidenceSource: 'provider-support'
+            type: 'security'
         });
         reviewExact(tiktok, 'https://support.tiktok.com/en/privacy-safety/account-privacy-settings', 'provider-support', {
             title: title('TikTok account privacy settings', 'إعدادات خصوصية حساب TikTok', 'Réglages de confidentialité du compte TikTok', 'TikTok hesap gizlilik ayarları')
@@ -159,66 +173,10 @@
             title: title('Amazon account password and two-step security', 'أمان كلمة مرور Amazon والتحقق بخطوتين', 'Sécurité du mot de passe Amazon et validation en deux étapes', 'Amazon parola ve iki adımlı doğrulama güvenliği')
         });
     }
-})();
 
-/**
- * Normalize trust metadata after every catalog maintenance and manual-review layer.
- */
-(() => {
-    const LEGACY_DEFAULT_DATE = '2026-08-21';
-
-    platforms.forEach(platform => {
-        (platform.resources || []).forEach(resource => {
-            if (resource.__verifiedWasMissing && resource.verified === LEGACY_DEFAULT_DATE) {
-                delete resource.verified;
-            }
-
-            if (resource.__officialWasMissing && resource.official === true) {
-                resource.official = false;
-            }
-
-            resource.provenance = resource.official === true ? 'provider-reviewed' : 'unverified';
-            resource.freshness = resource.verified ? 'dated-review' : 'unverified';
-
-            try { delete resource.__verifiedWasMissing; } catch (_) {}
-            try { delete resource.__officialWasMissing; } catch (_) {}
-        });
-    });
-})();
-
-/**
- * Evidence-backed provider review batch 6.
- *
- * This batch intentionally runs after normalization and sets the derived trust fields
- * explicitly. It covers only public first-party export/data/security resources whose
- * current contents were reviewed on 2026-08-24; authenticated settings pages remain
- * untouched unless their exact action was independently verified.
- */
-(() => {
-    const VERIFIED = '2026-08-24';
-    const byId = id => platforms.find(platform => platform.id === id);
-    const title = (en, ar, fr, tr) => ({ en, ar, fr, tr });
-    const trust = (resource, evidenceSource) => ({
-        ...resource,
-        official: true,
-        verified: VERIFIED,
-        evidenceSource,
-        provenance: 'provider-reviewed',
-        freshness: 'dated-review'
-    });
-
-    function replaceExact(platform, currentUrl, replacement, evidenceSource = 'provider-support') {
-        if (!platform) return;
-        const index = (platform.resources || []).findIndex(resource => resource.url === currentUrl);
-        if (index >= 0) platform.resources[index] = trust(replacement, evidenceSource);
-    }
-
-    function reviewExact(platform, url, evidenceSource = 'provider-support') {
-        if (!platform) return;
-        const index = (platform.resources || []).findIndex(resource => resource.url === url);
-        if (index >= 0) platform.resources[index] = trust(platform.resources[index], evidenceSource);
-    }
-
+    // -------------------------------------------------------------------------
+    // Provider review batch 6: public export/data/security resources.
+    // -------------------------------------------------------------------------
     const discord = byId('discord');
     replaceExact(discord,
         'https://support.discord.com/hc/en-us/articles/360004957991-Requesting-a-Copy-of-your-Data',
@@ -280,4 +238,93 @@
             title: title('Secure Telegram after a lost or stolen phone', 'تأمين Telegram بعد فقدان الهاتف أو سرقته', 'Sécuriser Telegram après la perte ou le vol du téléphone', 'Kayıp veya çalınan telefondan sonra Telegram’ı güvene alın'),
             type: 'security'
         });
+
+    // -------------------------------------------------------------------------
+    // Provider review batch 7: public privacy/data/security guidance.
+    // -------------------------------------------------------------------------
+    const reddit = byId('reddit');
+    if (reddit) {
+        reddit.loginRequired = true;
+        replaceExact(reddit, 'https://www.reddit.com/settings/data-request', {
+            url: 'https://support.reddithelp.com/hc/en-us/articles/360043048352-How-do-I-request-a-copy-of-my-Reddit-data-and-information',
+            title: title('Request a copy of your Reddit data', 'طلب نسخة من بيانات Reddit', 'Demander une copie de vos données Reddit', 'Reddit verilerinizin bir kopyasını isteyin'),
+            type: 'backup'
+        });
+        replaceExact(reddit, 'https://www.reddit.com/settings/privacy', {
+            url: 'https://support.reddithelp.com/hc/en-us/articles/360043047952-How-can-I-control-how-Reddit-uses-my-information',
+            title: title('Control how Reddit uses your information', 'التحكم بكيفية استخدام Reddit لمعلوماتك', 'Contrôler la manière dont Reddit utilise vos informations', 'Reddit’in bilgilerinizi nasıl kullandığını yönetin'),
+            type: 'settings'
+        });
+        replaceExact(reddit, 'https://www.reddit.com/settings/', {
+            url: 'https://support.reddithelp.com/hc/en-us/articles/360043483511-Where-and-how-can-I-access-my-Reddit-data-and-information',
+            title: title('Find and manage your Reddit account data', 'العثور على بيانات حساب Reddit وإدارتها', 'Trouver et gérer les données de votre compte Reddit', 'Reddit hesap verilerinizi bulun ve yönetin'),
+            type: 'manage'
+        });
+    }
+
+    const pinterest = byId('pinterest');
+    if (pinterest) {
+        pinterest.loginRequired = true;
+        replaceExact(pinterest, 'https://www.pinterest.com/settings/privacy-and-data', {
+            url: 'https://help.pinterest.com/en/article/download-your-pinterest-data',
+            title: title('Download your Pinterest data', 'تنزيل بيانات Pinterest', 'Télécharger vos données Pinterest', 'Pinterest verilerinizi indirin'),
+            type: 'backup'
+        });
+        replaceExact(pinterest, 'https://www.pinterest.com/settings/account-settings', {
+            url: 'https://help.pinterest.com/en/article/your-privacy-and-data-settings',
+            title: title('Manage Pinterest privacy and data settings', 'إدارة إعدادات خصوصية Pinterest والبيانات', 'Gérer les réglages de confidentialité et de données Pinterest', 'Pinterest gizlilik ve veri ayarlarını yönetin'),
+            type: 'settings'
+        });
+    }
+
+    const spotify = byId('spotify');
+    if (spotify) {
+        spotify.loginRequired = true;
+        replaceExact(spotify, 'https://www.spotify.com/account/privacy/', {
+            url: 'https://support.spotify.com/us/article/data-rights-and-privacy-settings/',
+            title: title('Spotify data rights and privacy choices', 'حقوق البيانات وخيارات الخصوصية في Spotify', 'Droits sur les données et choix de confidentialité Spotify', 'Spotify veri hakları ve gizlilik seçenekleri'),
+            type: 'backup'
+        });
+        replaceExact(spotify, 'https://www.spotify.com/account/change-password/', {
+            url: 'https://support.spotify.com/us/article/protect-your-account/',
+            title: title('Protect your Spotify account', 'حماية حساب Spotify', 'Protéger votre compte Spotify', 'Spotify hesabınızı koruyun'),
+            type: 'security'
+        });
+    }
+
+    const yahoo = byId('yahoo');
+    reviewExact(yahoo,
+        'https://legal.yahoo.com/xw/en/yahoo/privacy/dashboard/index.html',
+        'provider-privacy-portal');
+
+    const zoom = byId('zoom');
+    if (zoom) {
+        zoom.loginRequired = true;
+        replaceExact(zoom, 'https://support.zoom.us/hc/en-us/articles/201363003', {
+            url: 'https://support.zoom.com/hc/en/article?id=zm_kb&sysparm_article=KB0057736',
+            title: title('Use Zoom Data & Privacy to export account data', 'استخدام Zoom Data & Privacy لتصدير بيانات الحساب', 'Utiliser Zoom Data & Privacy pour exporter les données du compte', 'Hesap verilerini dışa aktarmak için Zoom Data & Privacy kullanın'),
+            type: 'backup'
+        });
+        replaceExact(zoom, 'https://zoom.us/profile/password', {
+            url: 'https://support.zoom.com/hc/en/article?id=zm_kb&sysparm_article=KB0061483',
+            title: title('Manage your Zoom password', 'إدارة كلمة مرور Zoom', 'Gérer votre mot de passe Zoom', 'Zoom parolanızı yönetin'),
+            type: 'security'
+        });
+    }
+
+    // Final normalization: legacy compatibility defaults never become review evidence.
+    platforms.forEach(platform => {
+        (platform.resources || []).forEach(resource => {
+            if (resource.__verifiedWasMissing && resource.verified === LEGACY_DEFAULT_DATE) {
+                delete resource.verified;
+            }
+            if (resource.__officialWasMissing && resource.official === true) {
+                resource.official = false;
+            }
+
+            resource.provenance = resource.official === true ? 'provider-reviewed' : 'unverified';
+            resource.freshness = resource.verified ? 'dated-review' : 'unverified';
+            clearLegacyMarkers(resource);
+        });
+    });
 })();

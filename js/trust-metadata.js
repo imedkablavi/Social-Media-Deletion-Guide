@@ -25,16 +25,10 @@
             verified: VERIFIED,
             evidenceSource
         });
-        // This exact URL now has explicit review evidence, so legacy absence markers
-        // no longer describe its current maintained trust state.
         try { delete resource.__verifiedWasMissing; } catch (_) {}
         try { delete resource.__officialWasMissing; } catch (_) {}
     }
 
-    // Google: full-account deletion and YouTube channel deletion are different scopes.
-    // The legacy 55770 URL is currently a video-deletion article; 55759 is the
-    // provider's current channel hide/delete guidance and explicitly does not delete
-    // the parent Google Account.
     const google = byId('google');
     if (google) {
         google.loginRequired = true;
@@ -61,9 +55,6 @@
         });
     }
 
-    // WhatsApp: two legacy article IDs now resolve to unrelated or superseded help
-    // content. Replace them with the provider's current compromised-account and
-    // privacy-settings guidance; chat export remains a separate backup workflow.
     const whatsapp = byId('whatsapp');
     if (whatsapp) {
         whatsapp.loginRequired = true;
@@ -90,8 +81,6 @@
         });
     }
 
-    // Snapchat: use the current canonical Help Center routes rather than old
-    // support.snapchat.com aliases, while retaining the authenticated account portal.
     const snapchat = byId('snapchat');
     if (snapchat) {
         snapchat.loginRequired = true;
@@ -121,8 +110,6 @@
         });
     }
 
-    // TikTok: replace the broad safety category with the provider's exact Account
-    // Safety article and retain explicit first-party data/privacy guidance.
     const tiktok = byId('tiktok');
     if (tiktok) {
         tiktok.loginRequired = true;
@@ -146,9 +133,6 @@
         });
     }
 
-    // Microsoft: the privacy dashboard and recovery form are authenticated provider
-    // account actions. Reachability may classify them as auth-required; that does not
-    // make them dead and is kept separate from this manual evidence review.
     const microsoft = byId('microsoft');
     if (microsoft) {
         microsoft.loginRequired = true;
@@ -169,9 +153,6 @@
         });
     }
 
-    // Amazon: only the exact Amazon Pay security guidance was content-reviewed in
-    // this batch. Amazon.com deletion/data-request routes remain unverified until an
-    // authenticated/manual review can confirm their current destructive/export scope.
     const amazon = byId('amazon');
     if (amazon) {
         reviewExact(amazon, 'https://pay.amazon.com/help/201754750', 'provider-support', {
@@ -182,10 +163,6 @@
 
 /**
  * Normalize trust metadata after every catalog maintenance and manual-review layer.
- *
- * `verified` means the exact effective URL was manually reviewed on that date.
- * Automated reachability checks never write this field. Legacy compatibility
- * defaults are removed when the original resource had no evidence-bearing field.
  */
 (() => {
     const LEGACY_DEFAULT_DATE = '2026-08-21';
@@ -197,8 +174,6 @@
             }
 
             if (resource.__officialWasMissing && resource.official === true) {
-                // `false` here means first-party provenance is not confirmed by the
-                // maintained metadata; it does not assert that the URL is third-party.
                 resource.official = false;
             }
 
@@ -209,4 +184,100 @@
             try { delete resource.__officialWasMissing; } catch (_) {}
         });
     });
+})();
+
+/**
+ * Evidence-backed provider review batch 6.
+ *
+ * This batch intentionally runs after normalization and sets the derived trust fields
+ * explicitly. It covers only public first-party export/data/security resources whose
+ * current contents were reviewed on 2026-08-24; authenticated settings pages remain
+ * untouched unless their exact action was independently verified.
+ */
+(() => {
+    const VERIFIED = '2026-08-24';
+    const byId = id => platforms.find(platform => platform.id === id);
+    const title = (en, ar, fr, tr) => ({ en, ar, fr, tr });
+    const trust = (resource, evidenceSource) => ({
+        ...resource,
+        official: true,
+        verified: VERIFIED,
+        evidenceSource,
+        provenance: 'provider-reviewed',
+        freshness: 'dated-review'
+    });
+
+    function replaceExact(platform, currentUrl, replacement, evidenceSource = 'provider-support') {
+        if (!platform) return;
+        const index = (platform.resources || []).findIndex(resource => resource.url === currentUrl);
+        if (index >= 0) platform.resources[index] = trust(replacement, evidenceSource);
+    }
+
+    function reviewExact(platform, url, evidenceSource = 'provider-support') {
+        if (!platform) return;
+        const index = (platform.resources || []).findIndex(resource => resource.url === url);
+        if (index >= 0) platform.resources[index] = trust(platform.resources[index], evidenceSource);
+    }
+
+    const discord = byId('discord');
+    replaceExact(discord,
+        'https://support.discord.com/hc/en-us/articles/360004957991-Requesting-a-Copy-of-your-Data',
+        {
+            url: 'https://support.discord.com/hc/en-us/articles/360004027692-Requesting-a-Copy-of-your-Data',
+            title: title('Request a copy of your Discord data', 'طلب نسخة من بيانات Discord', 'Demander une copie de vos données Discord', 'Discord verilerinizin bir kopyasını isteyin'),
+            type: 'backup'
+        });
+
+    const slack = byId('slack');
+    reviewExact(slack, 'https://slack.com/help/articles/201658943-Export-your-workspace-data');
+
+    const ebay = byId('ebay');
+    replaceExact(ebay,
+        'https://www.ebay.com/help/account/requesting-personal-data/requesting-personal-data?id=5089',
+        {
+            url: 'https://www.ebay.com/help/requesting-personal-data/account/requesting-personal-data?id=5089',
+            title: title('Request your personal data from eBay', 'طلب بياناتك الشخصية من eBay', 'Demander vos données personnelles à eBay', 'eBay kişisel verilerinizi isteyin'),
+            type: 'backup'
+        });
+    replaceExact(ebay,
+        'https://www.ebay.com/help/account/protecting-account/keeping-your-account-secure?id=4191',
+        {
+            url: 'https://www.ebay.com/help/account/protecting-account/tips-keeping-ebay-account-secure?id=4872',
+            title: title('Keep your eBay account secure', 'الحفاظ على أمان حساب eBay', 'Sécuriser votre compte eBay', 'eBay hesabınızı güvende tutun'),
+            type: 'security'
+        });
+
+    const playstation = byId('playstation');
+    reviewExact(playstation, 'https://www.playstation.com/en-us/support/account/data-request/');
+    reviewExact(playstation, 'https://www.playstation.com/en-us/support/account/security-best-practice/');
+
+    const notion = byId('notion');
+    reviewExact(notion, 'https://www.notion.com/help/export-your-content');
+
+    const proton = byId('protonmail');
+    replaceExact(proton,
+        'https://proton.me/support/account/migrate',
+        {
+            url: 'https://proton.me/support/proton-mail-export-tool',
+            title: title('Export and back up Proton Mail', 'تصدير Proton Mail ونسخه احتياطياً', 'Exporter et sauvegarder Proton Mail', 'Proton Mail’i dışa aktarın ve yedekleyin'),
+            type: 'backup'
+        });
+
+    const stackoverflow = byId('stackoverflow');
+    replaceExact(stackoverflow,
+        'https://stackoverflow.com/legal/gdpr/request',
+        {
+            url: 'https://policies.stackoverflow.co/data-request/',
+            title: title('Submit a Stack Overflow data request', 'إرسال طلب بيانات إلى Stack Overflow', 'Envoyer une demande de données Stack Overflow', 'Stack Overflow veri isteği gönderin'),
+            type: 'backup'
+        });
+
+    const telegram = byId('telegram');
+    replaceExact(telegram,
+        'https://telegram.org/faq#q-how-do-i-log-out',
+        {
+            url: 'https://telegram.org/faq#q-my-phone-was-stolen-what-do-i-do',
+            title: title('Secure Telegram after a lost or stolen phone', 'تأمين Telegram بعد فقدان الهاتف أو سرقته', 'Sécuriser Telegram après la perte ou le vol du téléphone', 'Kayıp veya çalınan telefondan sonra Telegram’ı güvene alın'),
+            type: 'security'
+        });
 })();

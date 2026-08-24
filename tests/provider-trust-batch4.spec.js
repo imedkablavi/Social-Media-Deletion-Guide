@@ -46,21 +46,32 @@ test('provider review batch 4 exposes only evidence-backed deletion resources', 
   expect(snapshot.yahoo.note).toContain('region-dependent');
 });
 
-test('batch 4 does not blanket-verify unrelated resource types', async ({ page }) => {
+test('later reviews cannot turn unrelated resource types into evidence-free verified entries', async ({ page }) => {
   await page.goto('/');
   const state = await page.evaluate(ids => Object.fromEntries(ids.map(id => {
     const platform = platforms.find(item => item.id === id);
     return [id, (platform?.resources || []).filter(resource => resource.type !== 'delete').map(resource => ({
+      url: resource.url,
       type: resource.type,
+      official: resource.official,
       verified: resource.verified || null,
+      evidenceSource: resource.evidenceSource || null,
       provenance: resource.provenance
     }))];
   })), Object.keys(EXPECTED));
 
-  // At least one unrelated legacy resource remains explicitly unverified in each
-  // multi-resource service; this guards against accidental catalog-wide stamping.
+  // Batch 4 originally left secondary resources unverified. Later batches may review
+  // those exact resources independently, but a dated resource must then carry explicit
+  // first-party evidence metadata. Anything without a review date must remain unverified.
   for (const [id, resources] of Object.entries(state)) {
-    if (!resources.length) continue;
-    expect(resources.some(resource => !resource.verified && resource.provenance === 'unverified'), `${id} should retain independently unverified resources`).toBe(true);
+    for (const resource of resources) {
+      if (resource.verified) {
+        expect(resource.official, `${id} ${resource.url} must be explicitly first-party`).toBe(true);
+        expect(resource.evidenceSource, `${id} ${resource.url} must carry review evidence`).toBeTruthy();
+        expect(resource.provenance, `${id} ${resource.url} must have reviewed provenance`).toBe('provider-reviewed');
+      } else {
+        expect(resource.provenance, `${id} ${resource.url} must remain unverified without a review date`).toBe('unverified');
+      }
+    }
   }
 });

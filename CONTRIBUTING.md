@@ -16,9 +16,9 @@ Good contributions include:
 
 The project treats three questions separately:
 
-1. **Provenance** - is the destination owned by the provider?
-2. **Manual freshness** - when was the exact effective URL and action label last reviewed by a person?
-3. **Automated reachability** - what did the latest HTTP check observe?
+1. **Provenance** — is the destination owned by the provider?
+2. **Manual freshness** — when was the exact effective URL and action label last reviewed by a person?
+3. **Automated reachability** — what did the latest HTTP check observe?
 
 A successful HTTP response does **not** prove that a URL deletes an account, and automated checks never update a manual `verified` date.
 
@@ -101,25 +101,25 @@ Use `easy`, `medium`, or `hard` for `difficulty`. This is a usability signal, no
 
 Use the narrowest accurate type:
 
-- `delete` - permanent account deletion
-- `disable` - reversible deactivation or cancellation; clarify which one in the title
-- `activity` - AI/chat/activity history deletion
-- `backup` - export or portability
-- `privacy` - privacy controls or privacy portal
-- `security` - recovery/authentication/security
-- `settings` - general account settings
-- `manage` - other account management
+- `delete` — permanent account deletion
+- `disable` — reversible deactivation or cancellation; clarify which one in the title
+- `activity` — AI/chat/activity history deletion
+- `backup` — export or portability
+- `privacy` — privacy controls or privacy portal
+- `security` — recovery/authentication/security
+- `settings` — general account settings
+- `manage` — other account management
 
 ## Link-state classification
 
 The scheduled resource audit deliberately distinguishes:
 
-- `live` - successful public response
-- `auth-required` - an account route or response requiring authentication
-- `bot-blocked` - automated clients are blocked or rate-limited; manual/browser verification may still be required
-- `method-restricted` - the endpoint rejects the audit request method
-- `transient` - timeout, network failure, or temporary 5xx condition
-- `dead` - confirmed terminal missing response such as 404/410 outside a narrowly documented bot-block policy
+- `live` — successful public response
+- `auth-required` — an account route or response requiring authentication
+- `bot-blocked` — automated clients are blocked or rate-limited; manual/browser verification may still be required
+- `method-restricted` — the endpoint rejects the audit request method
+- `transient` — timeout, network failure, or temporary 5xx condition
+- `dead` — confirmed terminal missing response such as 404/410 outside a narrowly documented bot-block policy
 
 Do not add broad exclusions simply to make CI green. Update `data/link-policy.json` only when the behavior is narrow, explainable, and supported by manual evidence.
 

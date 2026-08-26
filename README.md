@@ -2,7 +2,7 @@
 
 # Account Deletion & Privacy Guide
 
-**Find the right first-party path to delete an account, export your data, manage privacy, or remove AI activity in English, Arabic, French, and Turkish.**
+**Find the right first-party path to delete an account, export your data, manage privacy, or remove AI activity — in English, Arabic, French, and Turkish.**
 
 [![Quality](https://img.shields.io/github/actions/workflow/status/imedkablavi/Social-Media-Deletion-Guide/quality.yml?label=quality)](https://github.com/imedkablavi/Social-Media-Deletion-Guide/actions/workflows/quality.yml)
 [![Resource audit](https://img.shields.io/github/actions/workflow/status/imedkablavi/Social-Media-Deletion-Guide/link-check.yml?label=resource%20audit)](https://github.com/imedkablavi/Social-Media-Deletion-Guide/actions/workflows/link-check.yml)
@@ -11,6 +11,8 @@
 [![License](https://img.shields.io/badge/license-MIT-0f172a)](LICENSE)
 
 [**Try the live guide**](https://imedkablavi.github.io/Social-Media-Deletion-Guide/) · [**Report or update a service link**](https://github.com/imedkablavi/Social-Media-Deletion-Guide/issues/new?template=service-link-update.yml) · [Contribute](CONTRIBUTING.md) · [Security](SECURITY.md)
+
+If this directory saves you time, consider starring the repository so more people can find it.
 
 </div>
 
@@ -39,9 +41,9 @@ The catalog covers 60+ services across social media, messaging, AI, developer to
 
 A successful HTTP response is **not** proof that a page actually deletes an account. The project tracks three separate concepts:
 
-1. **Provenance** - whether a destination is known to be first-party/provider-owned.
-2. **Manual freshness** - when the exact effective URL and its purpose were last reviewed by a maintainer.
-3. **Automated reachability** - whether CI can currently reach the destination and how the provider responds to automation.
+1. **Provenance** — whether a destination is known to be first-party/provider-owned.
+2. **Manual freshness** — when the exact effective URL and its purpose were last reviewed by a maintainer.
+3. **Automated reachability** — whether CI can currently reach the destination and how the provider responds to automation.
 
 A resource can therefore be provider-owned but still need a fresh manual review. Automated checks never silently refresh a manual verification date.
 
@@ -49,13 +51,13 @@ A resource can therefore be provider-owned but still need a fresh manual review.
 
 The scheduled resource audit distinguishes:
 
-- `live` - the automated request reached a usable response.
-- `auth-required` - the destination is intentionally behind sign-in/account state.
-- `bot-blocked` - the provider rejects or rate-limits automation.
-- `method-restricted` - the endpoint rejects the automated request method.
-- `transient` - timeout, network, or temporary server failure.
-- `dead` - confirmed 404/410 outside an explicit restricted-access policy.
-- `unknown` - not enough evidence to classify safely.
+- `live` — the automated request reached a usable response.
+- `auth-required` — the destination is intentionally behind sign-in/account state.
+- `bot-blocked` — the provider rejects or rate-limits automation.
+- `method-restricted` — the endpoint rejects the automated request method.
+- `transient` — timeout, network, or temporary server failure.
+- `dead` — confirmed 404/410 outside an explicit restricted-access policy.
+- `unknown` — not enough evidence to classify safely.
 
 This avoids calling a real deletion page “dead” just because it requires authentication or blocks CI runners.
 
@@ -125,7 +127,7 @@ SEO validation checks self-canonicals, reciprocal EN/AR/FR/TR hreflang, `x-defau
 
 Four GitHub Actions workflows protect production behavior.
 
-### 1. Quality checks - `.github/workflows/quality.yml`
+### 1. Quality checks — `.github/workflows/quality.yml`
 
 - audits four-language localization integrity
 - builds the production site
@@ -137,7 +139,7 @@ Four GitHub Actions workflows protect production behavior.
 - checks JavaScript syntax
 - uploads the trust metadata report
 
-### 2. Resource freshness and reachability - `.github/workflows/link-check.yml`
+### 2. Resource freshness and reachability — `.github/workflows/link-check.yml`
 
 - runs on pull requests and pushes to `main`
 - runs weekly
@@ -146,7 +148,7 @@ Four GitHub Actions workflows protect production behavior.
 - classifies auth-required, bot-blocked, transient, and dead resources separately
 - uploads JSON/Markdown resource-audit artifacts
 
-### 3. Browser, accessibility, and Lighthouse QA - `.github/workflows/e2e.yml`
+### 3. Browser, accessibility, and Lighthouse QA — `.github/workflows/e2e.yml`
 
 - builds the production site
 - runs Playwright browser journeys
@@ -157,7 +159,7 @@ Four GitHub Actions workflows protect production behavior.
 - runs Lighthouse mobile regression gates for performance, accessibility, best practices, SEO, CLS, LCP, and TBT
 - uploads Lighthouse reports and failure traces
 
-### 4. GitHub Pages deployment - `.github/workflows/static.yml`
+### 4. GitHub Pages deployment — `.github/workflows/static.yml`
 
 - builds `dist/` from `main`
 - injects `GOOGLE_SITE_VERIFICATION` from the repository variable when configured
@@ -272,4 +274,4 @@ For security reports, see [SECURITY.md](SECURITY.md).
 
 ## License
 
-MIT - see [LICENSE](LICENSE).
+MIT — see [LICENSE](LICENSE).

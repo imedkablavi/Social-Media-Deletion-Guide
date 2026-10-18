@@ -26,6 +26,7 @@ function loadCatalog() {
     // Normalize shared trust metadata, then apply independently reviewed later batches.
     require('../js/trust-metadata.js');
     require('../js/provider-verification-batch8.js');
+    require('../js/provider-verification-batch9.js');
     require('../js/localization-integrity.js');
 
     return {
